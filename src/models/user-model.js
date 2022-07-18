@@ -2,6 +2,9 @@
 const { Schema, model } = require('mongoose');
 const { hashPassword } = require('../utils/data-crypto');
 const { DB_COLLECTION } = require('../config/constants');
+const jwt = require('jsonwebtoken');
+const constants = require('../config/constants');
+const crypto = require('crypto')
 
 const UserSchema = new Schema({
   firstName: {
@@ -24,6 +27,7 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true,
+    select:false
   },
   role: {
     type: String,
@@ -51,7 +55,17 @@ const UserSchema = new Schema({
   noOfClients: {
     type: Number,
   },
+  resetPasswordToken: {
+    type:String
+  },
+  resetPasswordTokenExpire:{
+    type:Date
+  },
+  comfirmEmailToken:{
+    type:String
+  }
 });
+
 
 UserSchema.pre('save', async function passHash(next) {
   if (this.isModified('password')) {
@@ -59,6 +73,26 @@ UserSchema.pre('save', async function passHash(next) {
   }
   return next();
 });
+
+UserSchema.methods.createAndSignJwtToken = function(){
+  return jwt.sign({id: this._id}, constants.JWT_PUBLIC_KEY, {
+    expiresIn:constants.JWT_USER_LOGIN_EXPIRATION
+})
+}
+
+UserSchema.methods.createResetPasswordToken =  function(){
+  const token = crypto.randomBytes(15).toString("hex")
+  this.resetPasswordToken = crypto.createHash('sha256').update(token).digest('hex')
+
+  this.resetPasswordTokenExpire = Date.now() + 10 * 60 * 1000
+  return this.resetPasswordToken
+}
+
+
+
+
+
+
 
 const UserModel = model(DB_COLLECTION.USER, UserSchema);
 module.exports = UserModel;

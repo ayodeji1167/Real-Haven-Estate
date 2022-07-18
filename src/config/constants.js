@@ -1,12 +1,11 @@
-const dotenv = require('dotenv');
-
-dotenv.config();
+const dotenv = require('dotenv') 
+dotenv.config()
 
 const constants = {
   APP_NAME: 'REAL HAVEN ESTATE',
-  PORT: process.env.PORT,
-  DATABASE_URI: process.env.DATABASE_URI,
-  JWT_PUBLIC_KEY: process.env.JWT_PUBLIC_KEY,
+  PORT: 8080,
+  DATABASE_URI: "mongodb+srv://imager:c1tw1wJbFeUo51HD@cluster0.t4sin.mongodb.net/?retryWrites=true&w=majority",
+  JWT_PUBLIC_KEY: "i4rj89gj24r8hejivoa[jg8qr9fjr]",
   JWT_USER_LOGIN_EXPIRATION: '2h',
   EMAIL_USER: process.env.EMAIL_USER,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
