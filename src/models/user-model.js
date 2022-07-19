@@ -89,10 +89,5 @@ UserSchema.methods.createResetPasswordToken =  function(){
 }
 
 
-
-
-
-
-
 const UserModel = model(DB_COLLECTION.USER, UserSchema);
 module.exports = UserModel;

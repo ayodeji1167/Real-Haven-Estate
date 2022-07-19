@@ -16,7 +16,7 @@ app.use(errorHandler);
 app.use(notFound);
 
 const start = async () => {
-  await connectDb();
   app.listen(PORT, () => console.log(`App started at port ${PORT} `));
+  await connectDb();
 };
 start();
