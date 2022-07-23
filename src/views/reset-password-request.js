@@ -1,5 +1,4 @@
-const theHtml = (token) => `
-<!DOCTYPE html>
+const resetPasswordRequest = (link, firstName) => ` <!DOCTYPE html>
 <html>
 
 <head>
@@ -8,7 +7,10 @@ const theHtml = (token) => `
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Email Confirmation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style type="text/css">
+    important;
+    }
+
+    /** <style type="text/css">
         /**
    * Google webfonts. Recommended to include the .woff version for cross-client compatibility.
    */
@@ -33,7 +35,7 @@ const theHtml = (token) => `
    * 1. Windows Mobile
    * 2. iOS / OSX
    */
-        
+
 
         /**
    * Remove extra space added to tables and cells in Outlook.
@@ -60,41 +62,36 @@ const theHtml = (token) => `
             font-weight: inherit !important;
             line-height: inherit !important;
             color: inherit !important;
-            text-decoration: none !important;
-        }
 
-        /**
-   * Fix centering issues in Android 4.4.
-   */
-        div[style*="margin: 16px 0;"] {
-            margin: 0 !important;
-        }
+            text-decoration: none ! * Fix centering issues in Android 4.4. */ div[style*="margin: 16px 0;"] {
+                margin: 0 !important;
+            }
 
-        body {
-            width: 100% !important;
-            height: 100% !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
+            body {
+                width: 100% !important;
+                height: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
 
-        /**
+            /**
    * Collapse table borders to avoid space between cells.
    */
-        table {
-            border-collapse: collapse !important;
-        }
+            table {
+                border-collapse: collapse !important;
+            }
 
-        a {
-            color: #1a82e2;
-        }
+            a {
+                color: #1a82e2;
+            }
 
-        img {
-            height: auto;
-            line-height: 100%;
-            text-decoration: none;
-            border: 0;
-            outline: none;
-        }
+            img {
+                height: auto;
+                line-height: 100%;
+                text-decoration: none;
+                border: 0;
+                outline: none;
+            }
     </style>
 
 </head>
@@ -152,7 +149,7 @@ const theHtml = (token) => `
                             style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
                             <h1
                                 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">
-                                Confirm Your Email Address</h1>
+                                Reset Your Password</h1>
                         </td>
                     </tr>
                 </table>
@@ -179,9 +176,12 @@ const theHtml = (token) => `
                     <tr>
                         <td align="left" bgcolor="#ffffff"
                             style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                            <p style="margin: 0;">Tap the button below to confirm your email address. If you didn't
-                                create an account with <a href="https://realhaven.herokuapp.com/">Haven Estate</a>, you can safely delete
-                                this email.</p>
+                            <p style="margin: 0;">Hello ${firstName}, We've recieved a request to reset the password for the Haven account associated with 
+                                this email . Yeah, no changes
+                            have been made to your account yet.
+                            
+                            You can reset your password by clicking the link below:
+</p>
                         </td>
                     </tr>
                     <!-- end copy -->
@@ -195,9 +195,9 @@ const theHtml = (token) => `
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
-                                                    <a href="http://localhost:3000/api/v1/user/confirmaccount/${token}" target="_blank"
-                                                        style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Do
-                                                        Something Sweet</a>
+                                                    <a href="${link}" target="_blank"
+                                                        style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Reset
+                                                        Password</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -209,7 +209,7 @@ const theHtml = (token) => `
                     <!-- end button -->
 
                     <!-- start copy -->
-                 
+
                     <!-- end copy -->
 
                     <!-- start copy -->
@@ -280,4 +280,4 @@ const theHtml = (token) => `
 
 </html> `;
 
-module.exports = theHtml;
+module.exports = resetPasswordRequest;

@@ -30,7 +30,7 @@ const UserSchema = new Schema({
   role: {
     type: String,
     enum: ['agent', 'user'],
-    required: true,
+    default: 'user',
   },
 
   image: {
@@ -58,28 +58,14 @@ const UserSchema = new Schema({
     default: false,
   },
 
+  resetPasswordToken: {
+    type: String,
+  },
 }, { timestamps: true });
-
-UserSchema.pre('save', async function passHash(next) {
-  if (this.isModified('password')) {
-    this.password = await hashPassword(this.password);
-  }
-  return next();
-});
 
 UserSchema.methods.createAndSignJwtToken = function () {
   return createJwt({ id: this._id, email: this.email }, '2h');
 };
-
-UserSchema.pre('findOneAndUpdate', async function (next) {
-  const { password } = this.getUpdate().$set;
-  if (!password) {
-    next();
-  }
-  const hash = await hashPassword(password);
-  this.getUpdate().$set.password = hash;
-  return next();
-});
 
 const UserModel = model(DB_COLLECTION.USER, UserSchema);
 module.exports = UserModel;

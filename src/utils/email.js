@@ -1,6 +1,19 @@
 const nodemailer = require('nodemailer');
 const { EMAIL_USER, EMAIL_PASSWORD } = require('../config/constants');
-const theHtml = require('../views/passwordReset');
+const {
+  verifyEmailHandlebars,
+  resetPasswordHandlebar,
+} = require('../views/index');
+// const pathToMjml = path.join(__dirname, '../views/mjml/first.mjml');
+// const mjmlToCompile = fs.readFileSync(pathToMjml);
+// const firstTemplate = handlebars.compile(mjmlToCompile.toString());
+
+// const context = {
+//   name: 'Afuwape Ayodeji',
+// };
+
+// const mjmlToUse = firstTemplate(context);
+// const { html } = mjml2html(mjmlToUse);
 
 const transport = nodemailer.createTransport({
   host: 'smtp.mailtrap.io',
@@ -14,12 +27,22 @@ const transport = nodemailer.createTransport({
 });
 
 const sendEmail = async (to, subject, payload) => {
-  console.log(payload);
+  let html;
+
+  if (subject === 'Verify Your Account') {
+    html = verifyEmailHandlebars(payload);
+  }
+
+  if (subject === 'Password Reset Request') {
+    html = resetPasswordHandlebar(payload);
+  }
+  // const { firstName, link } = payload;
+
   const info = {
     from: EMAIL_USER,
     to,
     subject,
-    html: theHtml(payload),
+    html,
   };
 
   await transport.sendMail(info);

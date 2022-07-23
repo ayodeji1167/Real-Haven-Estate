@@ -6,10 +6,12 @@ const constants = {
   APP_NAME: 'REAL HAVEN ESTATE',
   PORT: process.env.PORT,
   DATABASE_URI: process.env.DATABASE_URI,
+  MYSQL_URL: process.env.DATABASE_URL,
   JWT_PUBLIC_KEY: process.env.JWT_PUBLIC_KEY,
   JWT_USER_LOGIN_EXPIRATION: '2h',
   EMAIL_USER: process.env.EMAIL_USER,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+  BASE_URL: 'http://localhost:3000/api/v1',
 
   CLOUDINARY: {
     NAME: process.env.CLOUDINARY_NAME,
@@ -19,6 +21,7 @@ const constants = {
 
   DB_COLLECTION: {
     USER: 'USER',
+    PROPERTY: 'PROPERTY',
   },
 
   MESSAGES: {
@@ -33,6 +36,7 @@ const constants = {
     CONFIRM_EMAIL: 'Please confirm email',
     EMAIL_CONFIRMED: 'Your email have been confirmed',
     ALREADY_EXIST: 'Resource already exists',
+    ALREADY_VERIFIED: 'User has already been verified',
     CREATED: 'Resource created successfully',
     FETCHED: 'Resource fetched',
     UPDATED: 'Resource updated successfully',
