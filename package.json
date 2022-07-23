@@ -11,7 +11,8 @@
   },
   "scripts": {
     "dev": "nodemon app.js",
-    "fix:lint": "eslint . --fix"
+    "fix:lint": "eslint . --fix",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
