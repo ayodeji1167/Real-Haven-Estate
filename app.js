@@ -1,5 +1,6 @@
 require('express-async-errors');
 const express = require('express');
+const cors = require('cors')
 const { PORT } = require('./src/config/constants');
 const notFound = require('./src/middlewares/not-found');
 const errorHandler = require('./src/middlewares/error-handler');
@@ -7,6 +8,7 @@ const userRouter = require('./src/routers/user-routes');
 const connectDb = require('./db/db-connection');
 
 const app = express();
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
