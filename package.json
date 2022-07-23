@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "engines": {
+    
+      "node": "16.15.0",
+      "npm": "8.5.5"
+    
+  },
   "scripts": {
     "dev": "nodemon app.js",
     "fix:lint": "eslint . --fix"
