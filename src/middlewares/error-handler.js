@@ -4,7 +4,7 @@ const errorHandler = (err, req, res, next) => {
     message: err.message || 'Internal Serval Error',
     statusCode: err.statusCode || 500,
   };
-  res.status(CustomMessage.statusCode).send(CustomMessage.message);
+  res.status(CustomMessage.statusCode).json({ message: CustomMessage.message });
 };
 
 module.exports = errorHandler;

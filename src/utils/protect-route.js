@@ -12,14 +12,23 @@ exports.protect =  async (req, res, next) => {
     if(!token){
         throw new BadRequestError(MESSAGES.INVALID_TOKEN)
     }
-
+    
     try {
-        const user = decryptData(token)
-        console.log(user)
+        const user = await decryptData(token)
         req.user = await UserModel.findById(user.id)
-        console.log(req.user)
         next()
     } catch (error) {
         return next( new BadRequestError("You do not have the permission to access this page") )   
     }
 }
+
+exports.authorize = (...roles) => {
+    return (req,res,next) => {
+       if(!roles.includes(req.user.role)){
+        return next(new BadRequestError(`User role: ${req.user.role} is not authorized to access this route`))
+       }
+       next()
+    }
+}
+
+
