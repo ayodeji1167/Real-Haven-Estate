@@ -1,11 +1,11 @@
 require('express-async-errors');
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 const { PORT } = require('./src/config/constants');
 const notFound = require('./src/middlewares/not-found');
 const errorHandler = require('./src/middlewares/error-handler');
 const userRouter = require('./src/routers/user-routes');
-const propertyRouter = require('./src/routers/property-routes')
+const propertyRouter = require('./src/routers/property-routes');
 const connectDb = require('./db/db-connection');
 
 const app = express();

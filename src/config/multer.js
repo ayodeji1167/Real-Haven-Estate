@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
     } else if (documentFormats.includes(path.extname(file.originalname))) {
       dir = '/upload/documents';
     } else {
-      dir = 'upload/otherfiles';
+      dir = '/upload/otherfiles';
     }
     fs.mkdir(dir, { recursive: true }, (err) => callback(err, dir));
   },
@@ -46,6 +46,7 @@ const fileFilter = function (req, file, callback) {
 
 const upload = multer({
   storage,
+  limits: { fileSize: 1 * 1024 * 1024 * 1024 }, // 2mb
   fileFilter,
 
 });

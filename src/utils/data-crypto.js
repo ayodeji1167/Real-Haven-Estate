@@ -2,8 +2,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const { JWT_PUBLIC_KEY } = require('../config/constants');
-const BadRequestError = require('../error/bad-request-error');
-const {MESSAGES} = require('../config/constants')
 
 const hashPassword = async (password) => {
   const salt = await bcrypt.genSalt(10);
@@ -22,13 +20,8 @@ const createJwt = async (payload, expTime, secretKey = JWT_PUBLIC_KEY) => {
 };
 
 const decryptData = async (token, secretKey = JWT_PUBLIC_KEY) => {
-  try {
-    const data = jwt.verify(token, secretKey);
-    return data; 
-  } catch (error) {
-    console.log(error)
-    throw new BadRequestError(MESSAGES.INVALID_TOKEN)
-  }
+  const data = jwt.verify(token, secretKey);
+  return data;
 };
 module.exports = {
   hashPassword, comparePassword, createJwt, decryptData,

@@ -22,7 +22,7 @@ const transport = nodemailer.createTransport({
   tls: true,
   auth: {
     user: EMAIL_USER,
-    pass: EMAIL_PASSWORD
+    pass: EMAIL_PASSWORD,
   },
 });
 

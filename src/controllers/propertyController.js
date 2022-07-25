@@ -1,14 +1,11 @@
 const PropertyService = require('../services/property-service');
 const constants = require('../config/constants');
 
-class UserController {
-    createPropertyHandler = async (req, res) => {
-        const property = await PropertyService.createProperty(req)
-        res.status(200).json({
-          message: constants.MESSAGES.PROPERTY_CREATED,
-          property,
-        });
-      };
+class PropertyController {
+  createPropertyHandler = async (req, res) => {
+    await PropertyService.createProperty(req);
+    res.json({ messages: constants.MESSAGES.PROPERTY_CREATED });
+  };
 }
 
-module.exports = new UserController();
+module.exports = new PropertyController();

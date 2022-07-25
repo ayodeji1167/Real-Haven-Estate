@@ -122,9 +122,8 @@ class UserService {
   };
 
   resetLostPassword = async (req) => {
-    
-    // The user shouldnt be allowed to get hold of the 
-    
+    // The user shouldnt be allowed to get hold of the
+
     const { token } = req.params;
     const { password } = req.body;
 
@@ -139,9 +138,8 @@ class UserService {
       throw new BadRequestError('Invalid Request');
     }
 
-
     const hashedPassword = await hashPassword(password);
- 
+
     userExist.resetPasswordToken = undefined;
     userExist.password = hashedPassword;
     userExist.save();
