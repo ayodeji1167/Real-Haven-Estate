@@ -1,12 +1,13 @@
 const { Schema, model } = require('mongoose');
 const constants = require('../config/constants');
+
 const PropertySchema = new Schema({
   title: {
     type: String,
     required: true,
   },
   purpose: {
-    typr: String,
+    type: String,
     enum: ['BUY', 'SELL', 'RENT', 'SHORTLET'],
     required: true,
   },
@@ -19,7 +20,7 @@ const PropertySchema = new Schema({
     type: Number,
     required: true,
   },
-  noOfBathrom: {
+  noOfBathroom: {
     type: Number,
     required: true,
   },
