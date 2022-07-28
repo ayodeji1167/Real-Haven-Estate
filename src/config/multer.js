@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
     } else if (documentFormats.includes(path.extname(file.originalname))) {
       dir = '/upload/documents';
     } else {
-      dir = 'upload/otherfiles';
+      dir = '/upload/otherfiles';
     }
     fs.mkdir(dir, { recursive: true }, (err) => callback(err, dir));
   },
