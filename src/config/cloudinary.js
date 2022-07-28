@@ -8,8 +8,8 @@ cloudinary.v2.config({
 });
 
 const uploadSingleFile = async (filePath, section = 'IMAGE', resourceType = 'auto') => {
-  await cloudinary.v2.uploader.upload(filePath, { folder: `HAVEN/${section}`, resourceType: `${resourceType}` });
-  return 'File Uploaded Successfully';
+  const imageUpload = await cloudinary.v2.uploader.upload(filePath, { folder: `HAVEN/${section}`, resourceType: `${resourceType}` });
+  return imageUpload;
 };
 
 const deleteFromCloud = async (publicId, resourceType) => {
