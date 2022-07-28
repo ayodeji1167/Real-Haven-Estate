@@ -8,20 +8,20 @@ cloudinary.v2.config({
 });
 
 const uploadSingleFile = async (filePath, section = 'IMAGE', resourceType = 'auto') => {
-  await cloudinary.v2.uploader.upload(filePath, { folder: `HAVEN/${section}`, resourceType: `${resourceType}` });
-  return 'File Uploaded Successfully';
+  const result = await cloudinary.v2.uploader.upload(filePath, { folder: `HAVEN/${section}`, resourceType: `${resourceType}` });
+  return result;
 };
 
 const deleteFromCloud = async (publicId, resourceType) => {
-  await cloudinary.v2.uploader.destroy(publicId, {
+  const result = await cloudinary.v2.uploader.destroy(publicId, {
     resource_type: `${resourceType}`,
   });
-  return 'File Deleted Successfully';
+  return result;
 };
 
 const deleteMultiple = async (publicIds, resourceType) => {
-  await cloudinary.v2.api.delete_resources(publicIds, { resource_type: `${resourceType}` });
-  return 'All Files Deleted Successfully';
+  const result = await cloudinary.v2.api.delete_resources(publicIds, { resource_type: `${resourceType}` });
+  return result;
 };
 
 module.exports = { uploadSingleFile, deleteFromCloud, deleteMultiple };

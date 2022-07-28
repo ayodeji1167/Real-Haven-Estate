@@ -1,19 +1,26 @@
-require('express-async-errors');
+// require('express-async-errors');
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 const { PORT } = require('./src/config/constants');
 const notFound = require('./src/middlewares/not-found');
 const errorHandler = require('./src/middlewares/error-handler');
 const userRouter = require('./src/routers/user-routes');
+const propertyRouter = require('./src/routers/property-route');
 const connectDb = require('./db/db-connection');
+const authRouter = require('./src/routers/oauth-routes');
+const homepageRouter = require('./src/routers/home-page-server');
 
 const app = express();
+
 app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use('/', homepageRouter);
+app.use('/api/sessions', authRouter);
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/property', propertyRouter);
 app.use(errorHandler);
 app.use(notFound);
 

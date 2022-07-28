@@ -47,6 +47,5 @@ const fileFilter = function (req, file, callback) {
 const upload = multer({
   storage,
   fileFilter,
-
 });
 module.exports = upload;

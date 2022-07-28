@@ -1,12 +1,13 @@
 const { Schema, model } = require('mongoose');
 const constants = require('../config/constants');
+
 const PropertySchema = new Schema({
   title: {
     type: String,
     required: true,
   },
   purpose: {
-    typr: String,
+    type: String,
     enum: ['BUY', 'SELL', 'RENT', 'SHORTLET'],
     required: true,
   },
@@ -19,7 +20,7 @@ const PropertySchema = new Schema({
     type: Number,
     required: true,
   },
-  noOfBathrom: {
+  noOfBathroom: {
     type: Number,
     required: true,
   },
@@ -28,8 +29,8 @@ const PropertySchema = new Schema({
     required: true,
   },
   stateOfBuilding: {
-    type: String,
-    enum: ['FURNISHED', 'SERVICED', 'NEWLY-BUILT'],
+    type: [String],
+    required: true,
   },
 
   price: {
@@ -43,34 +44,41 @@ const PropertySchema = new Schema({
   additionalFeatures: {
     type: [String],
   },
-  mainImage: {
-    url: {
-      type: String,
-      required: true,
-    },
-    cloudinaryId: {
-      type: String,
-      required: true,
-    },
+  // mainImage: {
+  //   url: {
+  //     type: String,
+  //     required: true,
+  //   },
+  //   cloudinaryId: {
+  //     type: String,
+  //     required: true,
+  //   },
+  // },
+  // video: {
+  //   url: {
+  //     type: String,
+  //   },
+  //   cloudinaryId: {
+  //     type: String,
+  //   },
+  // },
+  // otherImages: {
+  //   url: {
+  //     type: [String],
+  //   },
+  //   cloudinaryId: {
+  //     type: [String],
+  //   },
+  // },
+  location: {
+    country: String,
+    state: String,
+    city: String,
+    address: String,
+    zipCode: String,
   },
-  video: {
-    url: {
-      type: String,
-      required: true,
-    },
-    cloudinaryId: {
-      type: String,
-      required: true,
-    },
-  },
-  otherImages: {
-    url: {
-      type: [String],
-    },
-    cloudinaryId: {
-      type: [String],
-    },
-  },
+
+  agent: Schema.Types.ObjectId,
 });
 
 const PropertyModel = model(constants.DB_COLLECTION.PROPERTY, PropertySchema);

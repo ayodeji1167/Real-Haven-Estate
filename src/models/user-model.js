@@ -53,6 +53,7 @@ const UserSchema = new Schema({
   noOfClients: {
     type: Number,
   },
+
   isValid: {
     type: Boolean,
     default: false,

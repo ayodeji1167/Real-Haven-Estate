@@ -13,15 +13,27 @@ const constants = {
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
   BASE_URL: 'http://localhost:3000/api/v1',
 
+  OAUTH: {
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GOOGLE_REDIRECT_URI: process.env.GOOGLE_OAUTH_REDIRECT_URI,
+  },
+
   CLOUDINARY: {
     NAME: process.env.CLOUDINARY_NAME,
     API_KEY: process.env.CLOUDINARY_API_KEY,
     SECRET_KEY: process.env.CLOUDINARY_SECRET_KEY,
   },
 
+  UPLOAD_PATH: {
+    PROPERTY_IMAGES: 'PROPERTY_IMAGES',
+    PROPERTY_VIDEOS: 'PROPERTY_VIDEOS',
+  },
+
   DB_COLLECTION: {
     USER: 'USER',
     PROPERTY: 'PROPERTY',
+    INSIGHT: 'INSIGHT',
   },
 
   MESSAGES: {
