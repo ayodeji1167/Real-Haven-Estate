@@ -122,6 +122,8 @@ class UserService {
   };
 
   resetLostPassword = async (req) => {
+    // The user shouldnt be allowed to get hold of the
+
     const { token } = req.params;
     const { password } = req.body;
 
@@ -138,7 +140,7 @@ class UserService {
 
     const hashedPassword = await hashPassword(password);
 
-    userExist.resetPasswordToken = '';
+    userExist.resetPasswordToken = undefined;
     userExist.password = hashedPassword;
     userExist.save();
 
