@@ -40,7 +40,6 @@ class GoogleOauthController {
       {
         email: googleUser.email,
         'image.url': googleUser.picture,
-        lastName: googleUser.picture,
         isValid: true,
       },
       {
@@ -50,6 +49,7 @@ class GoogleOauthController {
     );
     // create a session
 
+    console.log(user);
     // create  access and refresh tokens
     const token = await createJwt({ id: user._id, email: user.email }, '12h');
 

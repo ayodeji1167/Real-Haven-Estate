@@ -8,7 +8,6 @@ const userRouter = require('./src/routers/user-routes');
 const propertyRouter = require('./src/routers/property-route');
 const connectDb = require('./db/db-connection');
 const authRouter = require('./src/routers/oauth-routes');
-const homepageRouter = require('./src/routers/home-page-server');
 
 const app = express();
 

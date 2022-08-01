@@ -1,8 +1,6 @@
 const BadRequestError = require('../error/bad-request-error');
 const { MESSAGES, BASE_URL } = require('../config/constants');
-const {
-  comparePassword, decryptData, hashPassword, createJwt,
-} = require('../utils/data-crypto');
+const { comparePassword, decryptData, hashPassword } = require('../utils/data-crypto');
 
 const sendEmail = require('../utils/email');
 const UserModel = require('../models/user-model');
@@ -17,21 +15,18 @@ class UserService {
       throw new BadRequestError(MESSAGES.USER_EXIST);
     }
 
-    // hash user password
-    const hashedPassword = await hashPassword(password);
-
     // This creates and save the user
-    const newUser = await UserModel.create({
-      ...req.body,
-      password: hashedPassword,
-    });
+    const newUser = await UserModel.create(req.body);
+    newUser.password = await hashPassword(password);
 
     // Create token for the user
-    const token = await createJwt({ id: newUser._id, email: newUser.email });
+    const token = await newUser.createAndSignJwtToken();
+    await newUser.save();
+
     //  Send Email To User
     const link = `${BASE_URL}/user/confirmaccount/${token}`;
     await sendEmail(email, 'Verify Your Account', { firstName, link });
-    return newUser;
+    return { email: newUser.email, id: newUser._id };
   };
 
   confirmRegisteredEmail = async (req) => {
