@@ -43,13 +43,12 @@ class GoogleOauthController {
         isValid: true,
       },
       {
-        newUser: true,
+        newuser: true,
         upsert: true,
       },
     );
     // create a session
 
-    console.log(user);
     // create  access and refresh tokens
     const token = await createJwt({ id: user._id, email: user.email }, '12h');
 
