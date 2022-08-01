@@ -1,6 +1,5 @@
 /* eslint-disable no-shadow */
 const { Schema, model } = require('mongoose');
-const { hashPassword } = require('../utils/data-crypto');
 const { DB_COLLECTION } = require('../config/constants');
 const { createJwt } = require('../utils/data-crypto');
 

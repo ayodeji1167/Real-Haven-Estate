@@ -1,6 +1,8 @@
 const BadRequestError = require('../error/bad-request-error');
 const { MESSAGES, BASE_URL } = require('../config/constants');
-const { comparePassword, decryptData, hashPassword } = require('../utils/data-crypto');
+const {
+  comparePassword, decryptData, hashPassword, createJwt,
+} = require('../utils/data-crypto');
 
 const sendEmail = require('../utils/email');
 const UserModel = require('../models/user-model');
@@ -15,14 +17,17 @@ class UserService {
       throw new BadRequestError(MESSAGES.USER_EXIST);
     }
 
+    // hash user password
+    const hashedPassword = await hashPassword(password);
+
     // This creates and save the user
-    const newUser = await UserModel.create(req.body);
-    newUser.password = await hashPassword(password);
+    const newUser = await UserModel.create({
+      ...req.body,
+      password: hashedPassword,
+    });
 
     // Create token for the user
-    const token = await newUser.createAndSignJwtToken();
-    await newUser.save();
-
+    const token = await createJwt({ id: newUser._id, email: newUser.email });
     //  Send Email To User
     const link = `${BASE_URL}/user/confirmaccount/${token}`;
     await sendEmail(email, 'Verify Your Account', { firstName, link });
@@ -122,6 +127,8 @@ class UserService {
   };
 
   resetLostPassword = async (req) => {
+    // The user shouldnt be allowed to get hold of the
+
     const { token } = req.params;
     const { password } = req.body;
 
@@ -138,7 +145,7 @@ class UserService {
 
     const hashedPassword = await hashPassword(password);
 
-    userExist.resetPasswordToken = '';
+    userExist.resetPasswordToken = undefined;
     userExist.password = hashedPassword;
     userExist.save();
 

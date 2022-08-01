@@ -54,6 +54,7 @@ const constants = {
     UPDATED: 'Resource updated successfully',
     DELETED: 'Resource deleted successfully',
     NOT_FOUND: 'Not found',
+    MISSING_FIELDS: 'Please fill in the missing fields',
     INVALID_CREDENTIALS: 'Invalid credentials',
     INVALID_TOKEN: 'Invalid token',
     INVALID_PASSWORD: 'Invalid password',
@@ -68,6 +69,7 @@ const constants = {
     AGENT_CREATED: 'Agent created successfully',
     AGENT_UPDATED: 'Agent updated successfully',
     AGENT_NOT_EXIST: 'Agent does not exist',
+    PROPERTY_CREATED: 'You have successfully created a property',
   },
 };
 

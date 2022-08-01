@@ -2,23 +2,36 @@
 const axios = require('axios');
 const UserModel = require('../models/user-model');
 const { createJwt } = require('../utils/data-crypto');
+const getGoogleOauthUrl = require('../utils/get-google-url');
 const BadRequestError = require('../error/bad-request-error');
 const { OAUTH } = require('../config/constants');
 
 class GoogleOauthController {
+  handleRequestCode = async (req, res) => {
+    // When the user clicks on the login with google, it comes here
+    // here calls the google oauth server
+    const url = getGoogleOauthUrl();
+    res.redirect(url);
+  };
+
   handleOauth = async (req, res) => {
     // get the code from the query string
     const { code } = req.query;
 
     // get the id and access token from the code
-    const { id_token, access_token } = await this.getIdandAccessTokenFromCode(code);
+    const { id_token, access_token } = await this.getIdandAccessTokenFromCode(
+      code,
+    );
 
     // get the google user  with the token
-    const googleUser = await this.getGoogleUserFromAccessToken(access_token, id_token);
+    const googleUser = await this.getGoogleUserFromAccessToken(
+      access_token,
+      id_token,
+    );
 
     // save the user
     if (!googleUser.verified_email) {
-      throw new BadRequestError('This User\'s Email is  not verified');
+      throw new BadRequestError("This User's Email is  not verified");
     }
     const user = await this.saveUserFromGoogle(
       {
@@ -38,10 +51,15 @@ class GoogleOauthController {
     // create a session
 
     // create  access and refresh tokens
-    const token = await createJwt({ email: user.email }, '12h');
+    const token = await createJwt({ id: user._id, email: user.email }, '12h');
 
+    const responseObject = {
+      sucess: true,
+      user,
+      token,
+    };
     // redirect
-    res.redirect('https://realhaven.herokuapp.com/dashboard');
+    res.send(responseObject);
   };
 
   getIdandAccessTokenFromCode = async (code) => {
@@ -63,11 +81,14 @@ class GoogleOauthController {
   };
 
   getGoogleUserFromAccessToken = async (access_token, id_token) => {
-    const googleUser = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`, {
-      headers: {
-        Authorization: `Bearer ${id_token}`,
+    const googleUser = await axios.get(
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${id_token}`,
+        },
       },
-    });
+    );
     return googleUser.data;
   };
 

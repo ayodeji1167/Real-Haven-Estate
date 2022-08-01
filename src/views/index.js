@@ -9,6 +9,6 @@ const resetPasswordRequestHtml = fs.readFileSync(
 );
 
 const verifyEmailHandlebars = handlebars.compile(verifyEmailHtml);
-const resetPasswordHandlebar = handlebars.compile(resetPasswordRequestHtml)
+const resetPasswordHandlebar = handlebars.compile(resetPasswordRequestHtml);
 
 module.exports = { verifyEmailHandlebars, resetPasswordHandlebar };

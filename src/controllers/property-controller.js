@@ -13,6 +13,11 @@ class PropertyController {
     const properties = await PropertyService.getAllProperties(req);
     res.status(200).send(properties);
   };
+
+  updateProperty = async (req, res) => {
+    const updatedProperty = await PropertyService.updateProperty(req);
+    res.status(200).send(updatedProperty);
+  };
 }
 
 module.exports = new PropertyController();

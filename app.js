@@ -1,4 +1,4 @@
-// require('express-async-errors');
+require('express-async-errors');
 const express = require('express');
 const cors = require('cors');
 const { PORT } = require('./src/config/constants');
@@ -17,7 +17,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/', homepageRouter);
 app.use('/api/sessions', authRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/property', propertyRouter);

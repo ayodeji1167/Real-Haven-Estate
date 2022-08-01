@@ -1,0 +1,69 @@
+/* You can also add a mix of $or and and to give your functions
+ more flexibility, options and robustness, like so:
+*/
+
+const { ObjectId } = require('mongoose').Types;
+
+const idParam = new ObjectId(param.length < 12 ? '123456789012' : param);
+const { nameParam, nicknameParam, ageParam } = req.params || req.body || req.query;
+
+User.find(
+  {
+    $or: [{
+      _id: objId,
+    },
+    {
+      name: nameParam,
+    },
+    {
+      nickname: nicknameParam,
+    },
+    ],
+    $and: [{
+      age: ageParam,
+    }],
+  },
+  (err, docs) => {
+    if (!err) res.send(docs);
+  },
+);
+
+2 $or
+Matching values using $nor operator:
+In this example, we are retrieving only those employee’s documents whose salary is not 3000 and whose branch is not ECE.
+
+db.contributor.find({$nor: [{salary: 3000}, {branch: "ECE"}]}).pretty()
+
+
+3 $nor
+Matching values in nested/embedded documents using $nor operator:
+In this example, we are retrieving only those employee’s documents whose age is not 24 and whose state is not AP.
+
+db.contributor.find({$nor: [{"personal.age": 24},
+               {"personal.state": "AP"}]}).pretty()
+
+Matching values in an array using $nor operator:
+In this example, we are retrieving only those employee’s documents that does not match the given array.
+
+db.contributor.find({$nor: [{language: {$in: ["Java", "C++"]}}]}).pretty()
+
+
+4 $nin (Not In)
+
+Matching values using $nin operator:
+In this example, we are retrieving only those employee’s documents whose name is not Amit or Suman.
+
+db.contributor.find({name: {$nin: ["Amit", "Suman"]}}).pretty()
+
+Matching values in an array using $nin operator:
+In this example, we are retrieving only those employee’s documents who is not working with either C#, Python, or both languages.
+
+db.contributor.find({language: {$nin: ["C#", "Python"]}}).pretty()
+
+Updating data using $nin operator:
+In this example, we are adding a new field-value pair(i.e, salary: 10000) in the documents of those employee’s whose name is not Amit or Priya by using update() method with $in and $set operators.
+
+db.contributor.update({name: {$nin: ["Amit", "Priya"]}},
+                             {$set: {salary: 1000}})
+Note: The update() method by default update only one document at a time. If you want to update multiple documents, then set the value of its multi parameter to true. So, in this example, the update() method updated the first document that matches the given condition as shown in the below image.
+

@@ -3,10 +3,12 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+const { query } = require('express');
 const PropertyModel = require('../models/property-model');
 // const { uploadSingleFile } = require('../config/cloudinary');
 // const { UPLOAD_PATH } = require('../config/constants');
 const BadRequestError = require('../error/bad-request-error');
+const { findByIdAndUpdate } = require('../models/property-model');
 
 class PropertyService {
   createProperty = async (req) => {
@@ -63,33 +65,76 @@ class PropertyService {
     return property;
   };
 
+  updateProperty = async (req) => {
+    const { params } = req;
+    const updateObj = {
+      'location.state': 'England',
+      // ...body,
+
+    };
+    const updated = await PropertyModel.findByIdAndUpdate(params.id, updateObj, { new: true });
+    return updated;
+  };
+
   getAllProperties = async (req) => {
     const pageSize = Number(req.query.pageSize) || 10;
     const pageNo = Number(req.query.pageNo) || 1;
     const noToSkip = (pageNo - 1) * pageSize;
 
-    const {
-      noOfBedroom, noOfBathroom,
-      price, noOfToilet, stateOfBuilding, state, city, purpose,
-    } = req.query;
-
-    const queryObject = {};
-
-    if (state) {
-      queryObject['location.state'] = state;
-    }
-    if (noOfBathroom) {
-      queryObject.noOfBathroom = noOfBathroom;
-    }
-    if (city) {
-      queryObject.city = city;
-    }
-
+    // const queryObject = await this.getQueryObject(req);
+    const queryObject = { stateOfBuilding: { $all: ['Furnished', 'Serviced'] } };
     console.log(queryObject);
     const properties = await PropertyModel.find(queryObject).sort({ createdAt: -1 })
       .skip(noToSkip).limit(pageSize);
     const noOfProperties = await PropertyModel.countDocuments(queryObject);
     return { properties, noOfProperties, pageNo };
+  };
+
+  getQueryObject = async (req) => {
+    const {
+      noOfBedroom,
+      noOfBathroom,
+      search,
+      minPrice,
+      maxPrice,
+      noOfToilet,
+      stateOfBuilding,
+      state,
+      city,
+      purpose,
+    } = req.query;
+
+    const queryObject = {};
+
+    if (search) {
+      const searchRegex = new RegExp(search, 'gi');
+      queryObject.title = searchRegex;
+    }
+    if (minPrice || maxPrice) {
+      queryObject.price = { $lte: maxPrice || 1000000000, $gte: minPrice || 0 };
+    }
+    if (state) {
+      queryObject['location.state'] = state;
+    }
+    if (purpose) {
+      queryObject.purpose = purpose;
+    }
+    if (noOfBathroom) {
+      queryObject.noOfBathroom = noOfBathroom;
+    }
+    if (noOfBedroom) {
+      queryObject.noOfBedroom = noOfBedroom;
+    }
+    if (noOfToilet) {
+      queryObject.noOfToilet = noOfToilet;
+    }
+    if (stateOfBuilding) {
+      queryObject.stateOfBuilding = stateOfBuilding;
+    }
+    if (city) {
+      queryObject['location.city'] = city;
+    }
+    return queryObject;
   };
 }
 
