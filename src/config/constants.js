@@ -11,7 +11,7 @@ const constants = {
   JWT_USER_LOGIN_EXPIRATION: '2h',
   EMAIL_USER: process.env.EMAIL_USER,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
-  BASE_URL: 'http://localhost:3000/api/v1',
+  BASE_URL: 'https://real-haven.herokuapp.com/api/v1',
 
   OAUTH: {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,

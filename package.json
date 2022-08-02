@@ -23,8 +23,9 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-async-errors": "^3.1.1",
-    "express-session": "^1.17.3",
+    "express-handlebars": "^6.0.6",
     "express-joi-validation": "^5.0.1",
+    "express-session": "^1.17.3",
     "gulp": "^4.0.2",
     "handlebars": "^4.7.7",
     "joi": "^17.6.0",
@@ -33,6 +34,7 @@
     "mongoose": "^6.4.4",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.7.7",
+    "nodemailer-express-handlebars": "^5.0.0",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0"
   },

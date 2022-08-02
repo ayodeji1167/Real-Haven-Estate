@@ -11,8 +11,12 @@ class UserController {
   };
 
   confirmAccountHandler = async (req, res) => {
-    await UserService.confirmRegisteredEmail(req);
-    res.status(200).json({ message: constants.MESSAGES.EMAIL_CONFIRMED });
+    const result = await UserService.confirmRegisteredEmail(req);
+    if (!result) {
+      res.status(400).json({ mesage: constants.MESSAGES.INVALID_CREDENTIALS });
+    } else {
+      res.redirect('https://realhaven.herokuapp.com/login');
+    }
   };
 
   resendEmailConfirmation = async (req, res) => {

@@ -1,21 +1,9 @@
 const nodemailer = require('nodemailer');
+require('dotenv').config()
 const { EMAIL_USER, EMAIL_PASSWORD } = require('../config/constants');
-const {
-  verifyEmailHandlebars,
-  resetPasswordHandlebar,
-} = require('../views/index');
-// const pathToMjml = path.join(__dirname, '../views/mjml/first.mjml');
-// const mjmlToCompile = fs.readFileSync(pathToMjml);
-// const firstTemplate = handlebars.compile(mjmlToCompile.toString());
+const { verifyEmailTemplate } = require('../views/index');
 
-// const context = {
-//   name: 'Afuwape Ayodeji',
-// };
-
-// const mjmlToUse = firstTemplate(context);
-// const { html } = mjml2html(mjmlToUse);
-
-const transport = nodemailer.createTransport({
+const mailTrapTransport = nodemailer.createTransport({
   host: 'smtp.mailtrap.io',
   port: 2525,
   ssl: false,
@@ -26,15 +14,24 @@ const transport = nodemailer.createTransport({
   },
 });
 
+const googleMailTransporter = nodemailer.createTransport(
+
+  {
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    auth: {
+      user: process.env.GOOGLE_MAIL_USERNAME,
+      pass: process.env.GOOGLE_MAIL_PASSWORD,
+    },
+  },
+);
+
 const sendEmail = async (to, subject, payload) => {
   let html;
 
+  const { firstName, link } = payload;
   if (subject === 'Verify Your Account') {
-    html = verifyEmailHandlebars(payload);
-  }
-
-  if (subject === 'Password Reset Request') {
-    html = resetPasswordHandlebar(payload);
+    html = verifyEmailTemplate({ firstName, link });
   }
   // const { firstName, link } = payload;
 
@@ -45,7 +42,7 @@ const sendEmail = async (to, subject, payload) => {
     html,
   };
 
-  await transport.sendMail(info);
+  await googleMailTransporter.sendMail(info);
 };
 
 module.exports = sendEmail;

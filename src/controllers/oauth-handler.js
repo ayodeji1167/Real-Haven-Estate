@@ -42,10 +42,7 @@ class GoogleOauthController {
         'image.url': googleUser.picture,
         isValid: true,
       },
-      {
-        newuser: true,
-        upsert: true,
-      },
+      { upsert: true, new: true },
     );
     // create a session
 
