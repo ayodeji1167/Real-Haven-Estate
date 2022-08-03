@@ -1,5 +1,10 @@
-const BadRequestError = require('../error/bad-request-error');
-const { MESSAGES, BASE_URL } = require('../config/constants');
+const {
+  UnAuthorizedError,
+  BadRequestError,
+  NotFound,
+  AlreadyExist,
+} = require('../error/errors');
+const { MESSAGES, BASE_URL, FRONTEND_URL } = require('../config/constants');
 const { comparePassword, decryptData, hashPassword } = require('../utils/data-crypto');
 
 const sendEmail = require('../utils/email');
@@ -12,7 +17,7 @@ class UserService {
     const userExist = await UserModel.findOne({ email });
 
     if (userExist) {
-      throw new BadRequestError(MESSAGES.USER_EXIST);
+      throw new AlreadyExist(MESSAGES.USER_EXIST);
     }
 
     // This creates and save the user
@@ -54,7 +59,7 @@ class UserService {
     const userExist = await UserModel.findOne({ email });
 
     if (!userExist) {
-      throw new BadRequestError(MESSAGES.USER_NOT_EXIST);
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
 
     if (userExist.isValid) {
@@ -77,16 +82,16 @@ class UserService {
 
     const userExist = await UserModel.findOne({ email }).select('+password');
     if (!userExist) {
-      throw new BadRequestError(MESSAGES.USER_NOT_EXIST);
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
     if (userExist.isValid !== true) {
-      throw new BadRequestError(MESSAGES.CONFIRM_EMAIL);
+      throw new UnAuthorizedError(MESSAGES.CONFIRM_EMAIL);
     }
 
     const isMatch = await comparePassword(password, userExist.password);
 
     if (!isMatch) {
-      throw new BadRequestError(MESSAGES.INVALID_PASSWORD);
+      throw new UnAuthorizedError(MESSAGES.INVALID_PASSWORD);
     }
 
     const token = await userExist.createAndSignJwtToken();
@@ -104,14 +109,14 @@ class UserService {
     const userExist = await UserModel.findOne({ email });
 
     if (!userExist) {
-      throw new BadRequestError(MESSAGES.USER_NOT_EXIST);
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
     if (!userExist.isValid) {
       throw new BadRequestError('Your account is not verified');
     }
 
     const token = await userExist.createAndSignJwtToken();
-    const link = `${BASE_URL}/user/reset-lost-password/${token}`;
+    const link = `${FRONTEND_URL}/reset/${token}`;
     await sendEmail(email, 'Password Reset Request', {
       email,
       link,
@@ -131,7 +136,7 @@ class UserService {
     const userExist = await UserModel.findById(id);
 
     if (!userExist) {
-      throw new BadRequestError(MESSAGES.USER_NOT_EXIST);
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
 
     if (token !== userExist.resetPasswordToken) {
@@ -154,7 +159,7 @@ class UserService {
     const userExist = await UserModel.findById(userId).select('+password');
 
     if (!userExist) {
-      throw new BadRequestError(MESSAGES.USER_NOT_EXIST);
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
 
     const isMatch = await comparePassword(currentPassword, userExist.password);
@@ -165,6 +170,30 @@ class UserService {
     const hashedPassword = await hashPassword(newPassword);
     userExist.password = hashedPassword;
     await userExist.save();
+  };
+
+  getUserById = async (req) => {
+    const { id } = req.params;
+    if (!id) {
+      throw new BadRequestError('Input Id');
+    }
+    const user = await UserModel.findById(id);
+    if (!user) {
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
+    }
+    return user;
+  };
+
+  checkUserValidity = async (req) => {
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+    if (!user) {
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
+    }
+    if (user.isValid) {
+      return true;
+    }
+    return false;
   };
 }
 

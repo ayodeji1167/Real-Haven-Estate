@@ -3,7 +3,7 @@ const axios = require('axios');
 const UserModel = require('../models/user-model');
 const { createJwt } = require('../utils/data-crypto');
 const getGoogleOauthUrl = require('../utils/get-google-url');
-const BadRequestError = require('../error/bad-request-error');
+const BadRequestError = require('../error/errors');
 const { OAUTH } = require('../config/constants');
 
 class GoogleOauthController {
@@ -11,7 +11,7 @@ class GoogleOauthController {
     // When the user clicks on the login with google, it comes here
     // here calls the google oauth server
     const url = getGoogleOauthUrl();
-    res.redirect(url);
+    res.send(url);
   };
 
   handleOauth = async (req, res) => {

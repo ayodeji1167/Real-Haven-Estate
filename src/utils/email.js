@@ -1,7 +1,10 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config()
+require('dotenv').config();
 const { EMAIL_USER, EMAIL_PASSWORD } = require('../config/constants');
-const { verifyEmailTemplate } = require('../views/index');
+const {
+  verifyEmailTemplate,
+  passwordResetTemplate,
+} = require('../views/index');
 
 const mailTrapTransport = nodemailer.createTransport({
   host: 'smtp.mailtrap.io',
@@ -32,6 +35,8 @@ const sendEmail = async (to, subject, payload) => {
   const { firstName, link } = payload;
   if (subject === 'Verify Your Account') {
     html = verifyEmailTemplate({ firstName, link });
+  } else if (subject === 'Password Reset Request') {
+    html = passwordResetTemplate({ firstName, link });
   }
   // const { firstName, link } = payload;
 

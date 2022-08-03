@@ -7,7 +7,7 @@ const { query } = require('express');
 const PropertyModel = require('../models/property-model');
 // const { uploadSingleFile } = require('../config/cloudinary');
 // const { UPLOAD_PATH } = require('../config/constants');
-const BadRequestError = require('../error/bad-request-error');
+const BadRequestError = require('../error/errors');
 const { findByIdAndUpdate } = require('../models/property-model');
 
 class PropertyService {

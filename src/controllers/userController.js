@@ -13,7 +13,7 @@ class UserController {
   confirmAccountHandler = async (req, res) => {
     const result = await UserService.confirmRegisteredEmail(req);
     if (!result) {
-      res.status(400).json({ mesage: constants.MESSAGES.INVALID_CREDENTIALS });
+      res.status(400).json({ mesage: constants.MESSAGES.CONFIRM_EMAIL });
     } else {
       res.redirect('https://realhaven.herokuapp.com/login');
     }
@@ -56,6 +56,16 @@ class UserController {
     res
       .status(200)
       .json({ message: constants.MESSAGES.PASSWORD_RESET_SUCCESS });
+  };
+
+  getUserByIdHandler = async (req, res) => {
+    const user = await UserService.getUserById(req);
+    res.status(200).send(user);
+  };
+
+  checkUserValidityHandler = async (req, res) => {
+    const isValid = await UserService.checkUserValidity(req);
+    res.status(200).send(isValid);
   };
 }
 

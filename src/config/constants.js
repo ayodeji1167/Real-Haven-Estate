@@ -12,6 +12,7 @@ const constants = {
   EMAIL_USER: process.env.EMAIL_USER,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
   BASE_URL: 'https://real-haven.herokuapp.com/api/v1',
+  FRONTEND_URL: 'https://realhaven.herokuapp.com',
 
   OAUTH: {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
@@ -65,10 +66,6 @@ const constants = {
     PASSWORD_RESET_EMAIL_SENT:
       'The reset password link has been sent to your email address',
     PASSWORD_RESET_SUCCESS: 'Password reset successful',
-    AGENT_EXIST: 'Agent already exists',
-    AGENT_CREATED: 'Agent created successfully',
-    AGENT_UPDATED: 'Agent updated successfully',
-    AGENT_NOT_EXIST: 'Agent does not exist',
     PROPERTY_CREATED: 'You have successfully created a property',
   },
 };
