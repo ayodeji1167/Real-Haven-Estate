@@ -35,6 +35,7 @@ const sendEmail = async (to, subject, payload) => {
   const { firstName, link } = payload;
   if (subject === 'Verify Your Account') {
     html = verifyEmailTemplate({ firstName, link });
+    console.log(html)
   } else if (subject === 'Password Reset Request') {
     html = passwordResetTemplate({ firstName, link });
   }

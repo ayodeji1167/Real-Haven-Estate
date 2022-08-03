@@ -68,25 +68,26 @@
       width: 80%;
     }
 
-    .theButton {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 300px;
-      height: 52px;
-      background: #2E7DD7;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      font-family: 'Sora';
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 20px;
-      color: #FFFFFF;
-      margin-top: 80px;
-      margin-bottom: 40px;
-    }
+ .theButton {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px ;
+            width: 150px;
+            height: 32px;
+            background: #2E7DD7;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            font-family: 'Sora';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
+            color: #FFFFFF;
+            margin-top: 80px;
+            margin-bottom: 40px;
+        }
 
     .theSect {
       background-color:
@@ -125,6 +126,12 @@
       color:
         #6B7280;
     }
+
+     .theButton a{
+            text-decoration: none;
+            color: white;
+            padding: 1px;      
+        }
   </style>
 </head>
 
@@ -138,15 +145,11 @@
     <p class='theName'>Hi {{firstName}}</p>
     <p class='theContent'>Thank you for signing up to use Haven for your
       Property search.</p>
-    <p class='theContent'>Please verify your email to join thousands of people
+    <p class='theContent'>Please verify your google email to join thousands of people
       using Haven.</p>
 
     <p class="theButton">
-      <a href="{{link}}" style="text-decoration:none;
-        width: 100px; padding: 15px; 
-        font-weight: MEDIUM; background: #2E7DD7; color: #ffffff; 
-        cursor: pointer; border-radius: 1px;  
-        font-size: 110%;">Verify Email</a>
+      <a href="{{link}}">Verify Email</a>
         </p>
 
 
