@@ -17,17 +17,18 @@ const mailTrapTransport = nodemailer.createTransport({
   },
 });
 
-const googleMailTransporter = nodemailer.createTransport(
-
-  {
-    service: 'gmail',
-    host: 'smtp.gmail.com',
-    auth: {
-      user: process.env.GOOGLE_MAIL_USERNAME,
-      pass: process.env.GOOGLE_MAIL_PASSWORD,
-    },
+const googleMailTransporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    type: 'OAuth2',
+    user: process.env.GOOGLE_MAIL_USERNAME,
+    pass: process.env.GOOGLE_MAIL_PASSWORD,
+    accessToken: process.env.GMAIL_ACESSTOKEN,
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    refreshToken: process.env.GMAIL_REFRESHTOKEN,
   },
-);
+});
 
 const sendEmail = async (to, subject, payload) => {
   let html;
@@ -35,7 +36,6 @@ const sendEmail = async (to, subject, payload) => {
   const { firstName, link } = payload;
   if (subject === 'Verify Your Account') {
     html = verifyEmailTemplate({ firstName, link });
-    console.log(html)
   } else if (subject === 'Password Reset Request') {
     html = passwordResetTemplate({ firstName, link });
   }

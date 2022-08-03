@@ -67,6 +67,11 @@ class UserController {
     const isValid = await UserService.checkUserValidity(req);
     res.status(200).send(isValid);
   };
+
+  saveOauthUserHandler = async (req, res) => {
+    const responseObject = await UserService.saveAuthUser(req);
+    res.status(200).send(responseObject);
+  };
 }
 
 module.exports = new UserController();

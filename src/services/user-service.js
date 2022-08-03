@@ -5,7 +5,7 @@ const {
   AlreadyExist,
 } = require('../error/errors');
 const { MESSAGES, BASE_URL, FRONTEND_URL } = require('../config/constants');
-const { comparePassword, decryptData, hashPassword } = require('../utils/data-crypto');
+const { comparePassword, decryptData, hashPassword, createJwt } = require('../utils/data-crypto');
 
 const sendEmail = require('../utils/email');
 const UserModel = require('../models/user-model');
@@ -194,6 +194,39 @@ class UserService {
       return true;
     }
     return false;
+  };
+
+  saveAuthUser = async (req) => {
+    const {
+      email, firstName, lastName, image,
+    } = req.body;
+    if (!email) {
+      throw new BadRequestError('No email sent');
+    }
+
+    const user = await UserModel.findOneAndUpdate(
+      {
+        email,
+      },
+      {
+        email,
+        'image.url': image,
+        isValid: true,
+        firstName,
+        lastName,
+      },
+      { upsert: true, new: true },
+    );
+
+    const token = await createJwt({ id: user._id, email: user.email }, '12h');
+
+    const responseObject = {
+      sucess: true,
+      user,
+      token,
+    };
+    // redirect
+    return responseObject;
   };
 }
 
