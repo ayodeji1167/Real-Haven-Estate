@@ -30,11 +30,20 @@ const googleMailTransporter = nodemailer.createTransport({
   },
 });
 
+const normalGoogleSender = nodemailer.createTransport({
+  service: 'gmail',
+  host: 'smtp.gmail.com',
+  auth: {
+    user: 'akintundegbenga30@gmail.com',
+    pass: 'gqbmmzhsgdhpowni',
+  },
+});
+
 const sendEmail = async (to, subject, payload) => {
   let html;
 
   const { firstName, link } = payload;
-  if (subject === 'Verify Your Account') {
+  if (subject === 'Welcome To Haven') {
     html = verifyEmailTemplate({ firstName, link });
   } else if (subject === 'Password Reset Request') {
     html = passwordResetTemplate({ firstName, link });
@@ -42,7 +51,7 @@ const sendEmail = async (to, subject, payload) => {
   // const { firstName, link } = payload;
 
   const info = {
-    from: EMAIL_USER,
+    from: 'Real Haven <afuwapeayodeji2018@gmail.com>',
     to,
     subject,
     html,

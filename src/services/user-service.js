@@ -30,7 +30,7 @@ class UserService {
 
     //  Send Email To User
     const link = `${BASE_URL}/user/confirmaccount/${token}`;
-    await sendEmail(email, 'Verify Your Account', { firstName, link });
+    await sendEmail(email, 'Welcome To Haven', { firstName, link });
     return { email: newUser.email, id: newUser._id };
   };
 

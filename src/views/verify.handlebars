@@ -22,9 +22,6 @@
     }
 
     .mailHead {
-      display: flex;
-      justify-content: center;
-      align-items: baseline;
       padding-top: 50px;
       font-family: 'Sora';
       font-style: normal;
@@ -69,12 +66,8 @@
     }
 
  .theButton {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px ;
-            width: 150px;
-            height: 32px;
+            width: 300px;
+            height: 52px;
             background: #2E7DD7;
             border-radius: 8px;
             border: none;
@@ -101,7 +94,6 @@
       font-size:
         16px;
       line-height: 160%;
-      width: 80%;
       color: #6B7280;
     }
 
@@ -130,7 +122,6 @@
      .theButton a{
             text-decoration: none;
             color: white;
-            padding: 1px;      
         }
   </style>
 </head>
@@ -138,19 +129,19 @@
 <body>
   <div class='headDiv'>
     <div class='mailHead'><img
-        src='https://res.cloudinary.com/a244341167/image/upload/v1659374303/HAVEN/logo/haven_logo_zvfq8j.svg'
+        src='https://res.cloudinary.com/a244341167/image/upload/v1659553449/HAVEN/logo/haven_logo_u8olw4.png'
         alt='logo' />HAVEN</div>
   </div>
   <div class='theMain'>
     <p class='theName'>Hi {{firstName}}</p>
     <p class='theContent'>Thank you for signing up to use Haven for your
       Property search.</p>
-    <p class='theContent'>Please verify your google email to join thousands of people
+    <p class='theContent'>Please verify your email to join thousands of people
       using Haven.</p>
 
-    <p class="theButton">
+    <button class="theButton">
       <a href="{{link}}">Verify Email</a>
-        </p>
+        </button>
 
 
     <p class='theContent'>Best</p>
@@ -168,11 +159,11 @@
   </div>
   <footer class='theFooter'>
     <div style='justify-content: flex-start;' class='mailHead'><img
-        src='https://res.cloudinary.com/a244341167/image/upload/v1659374303/HAVEN/logo/haven_logo_zvfq8j.svg'
+        src='https://res.cloudinary.com/a244341167/image/upload/v1659553449/HAVEN/logo/haven_logo_u8olw4.png'
         alt='logo' />HAVEN</div>
     <p>Haven real estate agency</p>
     <p>Addresses</p>
-    <p>This email was intended for Rejoice. <a href=''>Unsubscribe</a></p>
+    <p>This email was intended for Rejoice. <a href='' style="color: #2E7DD7;">Unsubscribe</a></p>
   </footer>
 </body>
 
