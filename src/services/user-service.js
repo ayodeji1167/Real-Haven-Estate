@@ -5,7 +5,12 @@ const {
   AlreadyExist,
 } = require('../error/errors');
 const { MESSAGES, BASE_URL, FRONTEND_URL } = require('../config/constants');
-const { comparePassword, decryptData, hashPassword, createJwt } = require('../utils/data-crypto');
+const {
+  comparePassword,
+  decryptData,
+  hashPassword,
+  createJwt,
+} = require('../utils/data-crypto');
 
 const sendEmail = require('../utils/email');
 const UserModel = require('../models/user-model');
@@ -28,9 +33,9 @@ class UserService {
     const token = await newUser.createAndSignJwtToken();
     await newUser.save();
 
-    //  Send Email To User
+    //  Send Email For Verification To User
     const link = `${BASE_URL}/user/confirmaccount/${token}`;
-    await sendEmail(email, 'Welcome To Haven', { firstName, link });
+    await sendEmail(email, 'Verify Email Haven', { firstName, link });
     return { email: newUser.email, id: newUser._id };
   };
 
@@ -50,6 +55,18 @@ class UserService {
       { isValid: true },
       { new: true },
     );
+    const { email, firstName, role } = user;
+    const link = 'https://realhaven.herokuapp.com';
+
+    // After Verification, sends welcome email to the user or Agent
+    if (role === 'user') {
+      await sendEmail(email, 'Welcome To Haven User', { firstName, link });
+    } else {
+      await sendEmail(email, 'Welcome To Haven Agent', {
+        firstName,
+        link: 'https://realhaven.herokuapp.com/dashboard',
+      });
+    }
 
     return user;
   };
@@ -116,9 +133,8 @@ class UserService {
     }
 
     const token = await userExist.createAndSignJwtToken();
-    const link = `${FRONTEND_URL}/reset/${token}`;
+    const link = `${FRONTEND_URL}/reset/password/${token}`;
     await sendEmail(email, 'Password Reset Request', {
-      email,
       link,
     });
 
@@ -150,6 +166,12 @@ class UserService {
     userExist.save();
 
     // Send email to user that their email has been reset
+    const { firstName, email } = userExist;
+    const link = 'https://realhaven.herokuapp.com/login';
+    await sendEmail(email, 'Password Reset Successfull', {
+      firstName,
+      link,
+    });
   };
 
   resetCurrentPassword = async (req) => {

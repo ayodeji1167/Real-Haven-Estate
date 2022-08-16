@@ -1,21 +1,24 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
-const { EMAIL_USER, EMAIL_PASSWORD } = require('../config/constants');
+// const { EMAIL_USER, EMAIL_PASSWORD } = require('../config/constants');
 const {
   verifyEmailTemplate,
   passwordResetTemplate,
+  welcomeUserTemplate,
+  welcomeAgentTemplate,
+  passwordSuccessTemplate,
 } = require('../views/index');
 
-const mailTrapTransport = nodemailer.createTransport({
-  host: 'smtp.mailtrap.io',
-  port: 2525,
-  ssl: false,
-  tls: true,
-  auth: {
-    user: EMAIL_USER,
-    pass: EMAIL_PASSWORD,
-  },
-});
+// const mailTrapTransport = nodemailer.createTransport({
+//   host: 'smtp.mailtrap.io',
+//   port: 2525,
+//   ssl: false,
+//   tls: true,
+//   auth: {
+//     user: EMAIL_USER,
+//     pass: EMAIL_PASSWORD,
+//   },
+// });
 
 const googleMailTransporter = nodemailer.createTransport({
   service: 'gmail',
@@ -30,24 +33,32 @@ const googleMailTransporter = nodemailer.createTransport({
   },
 });
 
-const normalGoogleSender = nodemailer.createTransport({
-  service: 'gmail',
-  host: 'smtp.gmail.com',
-  auth: {
-    user: 'akintundegbenga30@gmail.com',
-    pass: 'gqbmmzhsgdhpowni',
-  },
-});
+// const normalGoogleSender = nodemailer.createTransport({
+//   service: 'gmail',
+//   host: 'smtp.gmail.com',
+//   auth: {
+//     user: 'akintundegbenga30@gmail.com',
+//     pass: 'gqbmmzhsgdhpowni',
+//   },
+// });
 
 const sendEmail = async (to, subject, payload) => {
   let html;
 
   const { firstName, link } = payload;
-  if (subject === 'Welcome To Haven') {
+  if (subject === 'Verify Email Haven') {
     html = verifyEmailTemplate({ firstName, link });
   } else if (subject === 'Password Reset Request') {
-    html = passwordResetTemplate({ firstName, link });
+    html = passwordResetTemplate({ link });
+  } else if (subject === 'Welcome To Haven, User') {
+    html = welcomeUserTemplate({ firstName, link });
+  } else if (subject === 'Welcome To Haven Agent') {
+    html = welcomeAgentTemplate({ firstName, link });
+  } else if (
+    subject === 'Password Reset Successfull') {
+    html = passwordSuccessTemplate({ firstName, link });
   }
+
   // const { firstName, link } = payload;
 
   const info = {

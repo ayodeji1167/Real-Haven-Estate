@@ -21,7 +21,7 @@ userRouter.post('/oauth/save', UserController.saveOauthUserHandler);
 userRouter.get('/resend-confirmaccount/', validator.body(resendConfirmation), UserController.resendEmailConfirmation);
 userRouter.post('/login', validator.body(login), UserController.loginHandler);
 userRouter.get('/check/valid/:id', UserController.checkUserValidityHandler);
-userRouter.get('/forgotpassword', validator.body(forgotPassword), UserController.forgotPasswordHandler);
+userRouter.post('/forgotpassword', validator.body(forgotPassword), UserController.forgotPasswordHandler);
 userRouter.get('/:id', UserController.getUserByIdHandler);
 userRouter.put(
   '/reset-lost-password/:token',
