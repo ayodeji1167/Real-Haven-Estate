@@ -163,7 +163,7 @@ class UserService {
 
     userExist.resetPasswordToken = undefined;
     userExist.password = hashedPassword;
-    userExist.save();
+    await userExist.save();
 
     // Send email to user that their email has been reset
     const { firstName, email } = userExist;
