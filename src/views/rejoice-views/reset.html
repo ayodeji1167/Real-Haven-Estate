@@ -1,45 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible"
-      content="IE=edge">
-    <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"
-      href="style.css">
-    <title>Reset Password Page</title>
-    <style>
-      
-    </style>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <body>
-    <div class="headDiv">
-      <div class="mailHead"><img src="https://res.cloudinary.com/a244341167/image/upload/v1659374303/HAVEN/logo/haven_logo_zvfq8j.svg"
-          alt="logo">HAVEN</div>
-    </div>
-    <div class="theMain">
-      <p class="theName">Hi Rejoice</p>
-      <p class="theContent">Your Haven password can be reset by clicking the button below.</p>
-      <p class="theContent">Please ignore this email if you did not request a new password.</p>
-      <button class="theButton">Reset Password</button>
-      <p class="theContent">Best</p>
-      <p class="theContent">The Haven Team</p>
-    </div>
-    <div class="theSect">
-      <p>Need help? <a href="">Contact our support team</a> or hit us up on Twitter <a href="">@Haven_HQ</a></p>
-      <p>Want to give us feedback? Let us know what you think on our <a href="">Feedback site</a></p>
-    </div>
-    <footer class="theFooter">
-      <div style="justify-content: flex-start;"
-        class="mailHead"><img src="https://res.cloudinary.com/a244341167/image/upload/v1659374303/HAVEN/logo/haven_logo_zvfq8j.svg"
-          alt="logo">HAVEN</div>
-      <p>Haven real estate agency</p>
-      <p>Addresses</p>
-      <p>This email was intended for Rejoice. <a href="">Unsubscribe</a></p>
-    </footer>
-  </body>
+  <link rel="stylesheet" href="style.css">
+  <title>Reset Password Page</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.headDiv {
+    width: 100%;
+    height: 120px;
+    background: #F9FAFB;
+    text-align: center;
+}
+
+.mailHead {
+    padding-top: 50px;
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    color: #2E7DD7
+}
+
+.mailHead img {
+    margin-right: 10px;
+}
+
+.theMain {
+    background-color: white;
+    padding-top: 48px;
+    padding-bottom: 40px;
+    padding-left: 10%;
+    border-bottom: 1px solid #D1D5DB;
+}
+
+.theName {
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: #374151;
+    width: 80%;
+}
+
+.theContent {
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 160%;
+    color: #6B7280;
+    width: 80%;
+}
+
+.theButton {
+    width: 300px;
+    height: 52px;
+    background: #2E7DD7;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: #FFFFFF;
+    margin-top: 80px;
+    margin-bottom: 40px;
+}
+
+.theButton a {
+    text-decoration: none;
+    color: white;
+}
+
+.theSect {
+    background-color: white;
+    padding-top: 48px;
+    padding-bottom: 40px;
+    padding-left: 10%;
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 160%;
+    color: #6B7280;
+}
+
+.theSect p {
+}
+
+.theSect a,
+.theMain>ul>li>p>a,
+.theFooter a {
+    color: #2E7DD7;
+}
+
+.theFooter {
+    background-color: #F9FAFB;
+    padding-bottom: 10px;
+    padding-left: 10%;
+}
+
+.theFooter p {
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 160%;
+    color: #6B7280;
+}
+
+.conDiv {
+    background-color: #EAF2FB;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+  </style>
+</head>
+
+<body>
+  <div class="headDiv">
+    <div class="mailHead"><img
+        src="https://res.cloudinary.com/a244341167/image/upload/v1659553449/HAVEN/logo/haven_logo_u8olw4.png"
+        alt="logo">HAVEN</div>
+  </div>
+  <div class="theMain">
+    <p class="theName">Hello Haven User</p>
+    <p class="theContent">Someone has requested a password reset for the account associated with this email</p>
+    <p class="theContent">If this was a mistake, just ignore this email and nothing will happen</p>
+    <p class="theContent">Your Haven password can be reset by clicking the button below.</p>
+
+            <button class="theButton"><a href="{{link}}">Reset Password</a></button>
+
+    <p class="theContent">Best</p>
+    <p class="theContent">The Haven Team</p>
+  </div>
+  <div class="theSect">
+    <p>Need help? <a href="">Contact our support team</a> or hit us up on Twitter <a href="">@Haven_HQ</a></p>
+    <p>Want to give us feedback? Let us know what you think on our <a href="">Feedback site</a></p>
+  </div>
+  <footer class="theFooter">
+    <div style="justify-content: flex-start;" class="mailHead"><img
+        src="https://res.cloudinary.com/a244341167/image/upload/v1659553449/HAVEN/logo/haven_logo_u8olw4.png"
+        alt="logo">HAVEN</div>
+    <p>Haven real estate agency</p>
+    <p>Addresses</p>
+    <p>This email was intended for Rejoice. <a href="">Unsubscribe</a></p>
+  </footer>
+</body>
 
 </html>
