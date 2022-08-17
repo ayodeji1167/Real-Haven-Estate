@@ -134,7 +134,7 @@ class UserService {
 
     const token = await userExist.createAndSignJwtToken();
     const link = `${FRONTEND_URL}/reset/password/${token}`;
-    await sendEmail(email, 'Password Reset Request', {
+    await sendEmail(email, 'We Recieved A Request', {
       link,
     });
 
@@ -168,7 +168,7 @@ class UserService {
     // Send email to user that their email has been reset
     const { firstName, email } = userExist;
     const link = 'https://realhaven.herokuapp.com/login';
-    await sendEmail(email, 'Password Reset Successfull', {
+    await sendEmail(email, 'Operation Successfull', {
       firstName,
       link,
     });

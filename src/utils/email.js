@@ -48,14 +48,13 @@ const sendEmail = async (to, subject, payload) => {
   const { firstName, link } = payload;
   if (subject === 'Verify Email Haven') {
     html = verifyEmailTemplate({ firstName, link });
-  } else if (subject === 'Password Reset Request') {
+  } else if (subject === 'We Recieved A Request') {
     html = passwordResetTemplate({ link });
   } else if (subject === 'Welcome To Haven User') {
     html = welcomeUserTemplate({ firstName, link });
   } else if (subject === 'Welcome To Haven Agent') {
     html = welcomeAgentTemplate({ firstName, link });
-  } else if (
-    subject === 'Password Reset Successfull') {
+  } else if (subject === 'Operation Successfull') {
     html = passwordSuccessTemplate({ firstName, link });
   }
 

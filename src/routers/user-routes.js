@@ -18,7 +18,7 @@ const userRouter = Router();
 
 userRouter.post('/register', validator.body(register), UserController.registrationHandler);
 userRouter.post('/oauth/save', UserController.saveOauthUserHandler);
-userRouter.get('/resend-confirmaccount/', validator.body(resendConfirmation), UserController.resendEmailConfirmation);
+userRouter.post('/resend-confirmaccount/', validator.body(resendConfirmation), UserController.resendEmailConfirmation);
 userRouter.post('/login', validator.body(login), UserController.loginHandler);
 userRouter.get('/check/valid/:id', UserController.checkUserValidityHandler);
 userRouter.post('/forgotpassword', validator.body(forgotPassword), UserController.forgotPasswordHandler);
