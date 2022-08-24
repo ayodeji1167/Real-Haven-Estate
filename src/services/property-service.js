@@ -17,42 +17,42 @@ class PropertyService {
      * const files =  {mainImage: [file1,file2], file:[file1,file2]}
      */
 
-    // const { mainImage, file } = req.files;
+    const { mainImage, file } = req.files;
 
-    // const otherImagesUrl = [];
-    // const otherImagesPublicId = [];
+    const otherImagesUrl = [];
+    const otherImagesPublicId = [];
 
-    // // Save The Main Image
-    // const { secure_url, public_id } = await uploadSingleFile(
-    //   mainImage[0].path,
-    //   UPLOAD_PATH.PROPERTY_IMAGES,
+    // Save The Main Image
+    const { secure_url, public_id } = await uploadSingleFile(
+      mainImage[0].path,
+      UPLOAD_PATH.PROPERTY_IMAGES,
 
-    //   'image',
-    // );
-    // const mainImageUrl = secure_url;
-    // const mainImagePublicId = public_id;
+      'image',
+    );
+    const mainImageUrl = secure_url;
+    const mainImagePublicId = public_id;
 
-    // // Save Other Images
-    // for (const image of file) {
-    //   const { secure_url, public_id } = await uploadSingleFile(
-    //     image.path,
-    //     UPLOAD_PATH.PROPERTY_IMAGES,
-    //     'image',
-    //   );
-    //   otherImagesUrl.push(secure_url);
-    //   otherImagesPublicId.push(public_id);
-    // }
+    // Save Other Images
+    for (const image of file) {
+      const { secure_url, public_id } = await uploadSingleFile(
+        image.path,
+        UPLOAD_PATH.PROPERTY_IMAGES,
+        'image',
+      );
+      otherImagesUrl.push(secure_url);
+      otherImagesPublicId.push(public_id);
+    }
 
     // Save Property To DB
     const property = await PropertyModel.create({
       ...req.body,
       mainImage: {
-        url: 'mainImageUrl',
-        cloudinaryId: 'mainImagePublicId',
+        url: mainImageUrl,
+        cloudinaryId: mainImagePublicId,
       },
       otherImages: {
-        url: ['otherImagesUrl'],
-        cloudinaryId: ['otherImagesPublicId'],
+        url: otherImagesUrl,
+        cloudinaryId: otherImagesPublicId,
       },
 
     });
