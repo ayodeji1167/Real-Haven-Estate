@@ -7,8 +7,15 @@ cloudinary.v2.config({
   api_secret: constants.CLOUDINARY.SECRET_KEY,
 });
 
-const uploadSingleFile = async (filePath, section = 'IMAGE', resourceType = 'auto') => {
-  const result = await cloudinary.v2.uploader.upload(filePath, { folder: `HAVEN/${section}`, resourceType: `${resourceType}` });
+const uploadSingleFile = async (
+  filePath,
+  section = 'IMAGE',
+  resourceType = 'auto',
+) => {
+  const result = await cloudinary.v2.uploader.upload(filePath, {
+    folder: `HAVEN/${section}`,
+    resourceType: `${resourceType}`,
+  });
   return result;
 };
 
@@ -20,7 +27,9 @@ const deleteFromCloud = async (publicId, resourceType) => {
 };
 
 const deleteMultiple = async (publicIds, resourceType) => {
-  const result = await cloudinary.v2.api.delete_resources(publicIds, { resource_type: `${resourceType}` });
+  const result = await cloudinary.v2.api.delete_resources(publicIds, {
+    resource_type: `${resourceType}`,
+  });
   return result;
 };
 

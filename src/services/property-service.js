@@ -3,12 +3,10 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-const { query } = require('express');
 const PropertyModel = require('../models/property-model');
-// const { uploadSingleFile } = require('../config/cloudinary');
-// const { UPLOAD_PATH } = require('../config/constants');
+const { uploadSingleFile } = require('../config/cloudinary');
+const { UPLOAD_PATH } = require('../config/constants');
 const BadRequestError = require('../error/errors');
-const { findByIdAndUpdate } = require('../models/property-model');
 
 class PropertyService {
   createProperty = async (req) => {
@@ -18,39 +16,44 @@ class PropertyService {
      * file is the key and value  is array of files
      * const files =  {mainImage: [file1,file2], file:[file1,file2]}
      */
-    // const { mainImage, file } = req.files;
 
-    // const otherImagesUrl = [];
-    // const otherImagesPublicId = [];
+    const { mainImage, file } = req.files;
 
-    // // Save The Main Image
-    // const { secure_url, public_id } = await uploadSingleFile(mainImage[0].path,
-    //  UPLOAD_PATH.PROPERTY_IMAGES, 'image');
-    // const mainImageUrl = secure_url;
-    // const mainImagePublicId = public_id;
+    const otherImagesUrl = [];
+    const otherImagesPublicId = [];
 
-    // // Save Other Images
-    // for (const image of file) {
-    //   const { secure_url, public_id } = await uploadSingleFile(
-    //     image.path,
-    //     UPLOAD_PATH.PROPERTY_IMAGES,
-    //     'image',
-    //   );
-    //   otherImagesUrl.push(secure_url);
-    //   otherImagesPublicId.push(public_id);
-    // }
+    // Save The Main Image
+    const { secure_url, public_id } = await uploadSingleFile(
+      mainImage[0].path,
+      UPLOAD_PATH.PROPERTY_IMAGES,
+
+      'image',
+    );
+    const mainImageUrl = secure_url;
+    const mainImagePublicId = public_id;
+
+    // Save Other Images
+    for (const image of file) {
+      const { secure_url, public_id } = await uploadSingleFile(
+        image.path,
+        UPLOAD_PATH.PROPERTY_IMAGES,
+        'image',
+      );
+      otherImagesUrl.push(secure_url);
+      otherImagesPublicId.push(public_id);
+    }
 
     // Save Property To DB
     const property = await PropertyModel.create({
       ...req.body,
-      // mainImage: {
-      //   url: mainImageUrl,
-      //   cloudinaryId: mainImagePublicId,
-      // },
-      // otherImages: {
-      //   url: otherImagesUrl,
-      //   cloudinaryId: otherImagesPublicId,
-      // },
+      mainImage: {
+        url: mainImageUrl,
+        cloudinaryId: mainImagePublicId,
+      },
+      otherImages: {
+        url: otherImagesUrl,
+        cloudinaryId: otherImagesPublicId,
+      },
 
     });
     return property;

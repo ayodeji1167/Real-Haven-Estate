@@ -6,76 +6,98 @@ const PropertySchema = new Schema({
     type: String,
     required: true,
   },
-  purpose: {
+
+  address: {
     type: String,
-    enum: ['BUY', 'SELL', 'RENT', 'SHORTLET'],
     required: true,
   },
+  state: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  country: {
+    type: String,
+    required: true,
+  },
+  postalCode: {
+    type: String,
+    required: true,
+  },
+
+  aptUnit: {
+    type: String,
+  },
+
+  price: {
+    type: String,
+    required: true,
+  },
+
+  pricePer: {
+    type: String,
+  },
+
   propertyType: {
     type: String,
     required: true,
   },
 
+  purpose: {
+    type: String,
+    required: true,
+  },
+
   noOfBedroom: {
-    type: Number,
+    type: String,
     required: true,
   },
   noOfBathroom: {
-    type: Number,
+    type: String,
     required: true,
   },
   noOfToilet: {
-    type: Number,
+    type: String,
     required: true,
   },
+
+  description: {
+    type: String,
+    required: true,
+  },
+
   stateOfBuilding: {
     type: [String],
     required: true,
   },
 
-  price: {
-    type: Number,
-    required: true,
-  },
   currency: {
     type: String,
-    enum: ['NAIRA', 'DOLLAR', 'EURO', 'POUND'],
   },
   additionalFeatures: {
     type: [String],
   },
-  // mainImage: {
-  //   url: {
-  //     type: String,
-  //     required: true,
-  //   },
-  //   cloudinaryId: {
-  //     type: String,
-  //     required: true,
-  //   },
-  // },
-  // video: {
-  //   url: {
-  //     type: String,
-  //   },
-  //   cloudinaryId: {
-  //     type: String,
-  //   },
-  // },
-  // otherImages: {
-  //   url: {
-  //     type: [String],
-  //   },
-  //   cloudinaryId: {
-  //     type: [String],
-  //   },
-  // },
-  location: {
-    country: String,
-    state: String,
-    city: String,
-    address: String,
-    zipCode: String,
+
+  mainImage: {
+    url: {
+      type: String,
+      required: true,
+    },
+    cloudinaryId: {
+      type: String,
+      required: true,
+    },
+  },
+  otherImages: {
+    url: {
+      type: [String],
+    },
+    cloudinaryId: {
+      type: [String],
+    },
   },
 
   agent: Schema.Types.ObjectId,
