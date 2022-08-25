@@ -17,7 +17,7 @@ class PropertyService {
      * const files =  {mainImage: [file1,file2], file:[file1,file2]}
      */
 
-    console.log('got here')
+    console.log('got here');
     const files = await req.files;
 
     console.log(files);
