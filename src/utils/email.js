@@ -1,51 +1,73 @@
 const nodemailer = require('nodemailer');
-const { EMAIL_USER, EMAIL_PASSWORD } = require('../config/constants');
+require('dotenv').config();
+// const { EMAIL_USER, EMAIL_PASSWORD } = require('../config/constants');
 const {
-  verifyEmailHandlebars,
-  resetPasswordHandlebar,
+  verifyEmailTemplate,
+  passwordResetTemplate,
+  welcomeUserTemplate,
+  welcomeAgentTemplate,
+  passwordSuccessTemplate,
 } = require('../views/index');
-// const pathToMjml = path.join(__dirname, '../views/mjml/first.mjml');
-// const mjmlToCompile = fs.readFileSync(pathToMjml);
-// const firstTemplate = handlebars.compile(mjmlToCompile.toString());
 
-// const context = {
-//   name: 'Afuwape Ayodeji',
-// };
+// const mailTrapTransport = nodemailer.createTransport({
+//   host: 'smtp.mailtrap.io',
+//   port: 2525,
+//   ssl: false,
+//   tls: true,
+//   auth: {
+//     user: EMAIL_USER,
+//     pass: EMAIL_PASSWORD,
+//   },
+// });
 
-// const mjmlToUse = firstTemplate(context);
-// const { html } = mjml2html(mjmlToUse);
-
-const transport = nodemailer.createTransport({
-  host: 'smtp.mailtrap.io',
-  port: 2525,
-  ssl: false,
-  tls: true,
+const googleMailTransporter = nodemailer.createTransport({
+  service: 'gmail',
   auth: {
-    user: EMAIL_USER,
-    pass: EMAIL_PASSWORD,
+    type: 'OAuth2',
+    user: process.env.GOOGLE_MAIL_USERNAME,
+    pass: process.env.GOOGLE_MAIL_PASSWORD,
+    accessToken: process.env.GMAIL_ACESSTOKEN,
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    refreshToken: process.env.GMAIL_REFRESHTOKEN,
   },
 });
+
+// const normalGoogleSender = nodemailer.createTransport({
+//   service: 'gmail',
+//   host: 'smtp.gmail.com',
+//   auth: {
+//     user: 'akintundegbenga30@gmail.com',
+//     pass: 'gqbmmzhsgdhpowni',
+//   },
+// });
 
 const sendEmail = async (to, subject, payload) => {
   let html;
 
-  if (subject === 'Verify Your Account') {
-    html = verifyEmailHandlebars(payload);
+  const { firstName, link } = payload;
+  if (subject === 'Verify Email Haven') {
+    html = verifyEmailTemplate({ firstName, link });
+  } else if (subject === 'We Recieved A Request') {
+    html = passwordResetTemplate({ link });
+  } else if (subject === 'Welcome To Haven User') {
+    html = welcomeUserTemplate({ firstName, link });
+  } else if (subject === 'Welcome To Haven Agent') {
+    html = welcomeAgentTemplate({ firstName, link });
+  } else if (subject === 'Operation Successfull') {
+    html = passwordSuccessTemplate({ firstName, link });
   }
 
-  if (subject === 'Password Reset Request') {
-    html = resetPasswordHandlebar(payload);
-  }
   // const { firstName, link } = payload;
 
   const info = {
-    from: EMAIL_USER,
+    from: 'Real Haven <afuwapeayodeji2018@gmail.com>',
     to,
     subject,
     html,
   };
 
-  await transport.sendMail(info);
+  await googleMailTransporter.sendMail(info);
 };
 
 module.exports = sendEmail;

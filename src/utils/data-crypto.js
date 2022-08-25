@@ -20,7 +20,7 @@ const createJwt = async (payload, expTime, secretKey = JWT_PUBLIC_KEY) => {
 };
 
 const decryptData = async (token, secretKey = JWT_PUBLIC_KEY) => {
-  const data = jwt.verify(token, secretKey);
+  const data = await jwt.verify(token, secretKey);
   return data;
 };
 module.exports = {

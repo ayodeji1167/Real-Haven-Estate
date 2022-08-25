@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.headDiv {
+    width: 100%;
+    height: 120px;
+    background: #F9FAFB;
+    text-align: center;
+}
+
+.mailHead {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    padding-top: 50px;
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 18px;
+    color: #2E7DD7
+}
+
+.mailHead img {
+    margin-right: 10px;
+}
+
+.theMain {
+    background-color: white;
+    padding-top: 48px;
+    padding-bottom: 40px;
+    padding-left: 10%;
+    border-bottom: 1px solid #D1D5DB;
+}
+
+.theName {
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: #374151;
+}
+
+.theContent {
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 160%;
+    color: #6B7280;
+    width: 80%;
+}
+
+.theButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 10px;
+    width: 300px;
+    height: 52px;
+    background: #2E7DD7;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: #FFFFFF;
+    margin-top: 80px;
+    margin-bottom: 40px;
+}
+
+.theSect {
+    background-color: white;
+    padding-top: 48px;
+    padding-bottom: 40px;
+    padding-left: 10%;
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 160%;
+    width: 80%;
+    color: #6B7280;
+}
+
+.theSect a {
+    color: #2E7DD7;
+}
+
+.theFooter {
+    background-color: #F9FAFB;
+    padding-bottom: 10px;
+    padding-left: 10%;
+}
+
+.theFooter p {
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 160%;
+    color: #6B7280;
+}
