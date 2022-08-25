@@ -6,7 +6,9 @@ const router = Router();
 
 router.post(
   '/',
-  upload.array('file', 5),
+  upload.fields([
+    { name: 'mainImage', maxCount: 1 },
+    { name: 'file', maxCount: 5 }]),
   PropertyController.postProperty,
 );
 router.get('/find', PropertyController.getAllProperties);
