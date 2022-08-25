@@ -2,6 +2,10 @@ const { Schema, model } = require('mongoose');
 const constants = require('../config/constants');
 
 const PropertySchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+  },
   title: {
     type: String,
     required: true,
