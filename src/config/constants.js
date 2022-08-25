@@ -34,7 +34,7 @@ const constants = {
   DB_COLLECTION: {
     USER: 'USER',
     PROPERTY: 'PROPERTY',
-    INSIGHT: 'INSIGHT',
+    INSIGHT: 'INSIGHT'
   },
 
   MESSAGES: {

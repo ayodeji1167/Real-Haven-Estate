@@ -194,8 +194,6 @@ class UserService {
     await userExist.save();
   };
 
-<<<<<<< HEAD
-=======
   getUserById = async (req) => {
     const { id } = req.params;
     if (!id) {
@@ -252,7 +250,40 @@ class UserService {
     // redirect
     return responseObject;
   };
->>>>>>> ce95842102cf2d69c420656344bd3d96d1847350
+
+  async updateAgentProfile(req){
+    const {full_name, title, website_url, bio } = req.body
+    const userId = req.params.id 
+    const user = await UserModel.findById(userId)
+
+    if(!user){
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
+    }
+
+    const splitedNames = full_name.split(' ')
+    
+    const updateAgentFields = {}
+    if(full_name){
+      updateAgentFields.firstName = splitedNames[0]
+      updateAgentFields.lastName = splitedNames[1]
+    }
+
+    if(bio){
+      updateAgentFields.bio = bio.trim()
+    }
+  
+    if(title){
+      updateAgentFields.title = title.trim()
+    }
+    
+    if(website_url){
+    updateAgentFields.website_url = website_url.trim()
+    }
+    
+    const updateAgentInfo = await UserModel.findByIdAndUpdate(userId, updateAgentFields, {new:true})
+    return updateAgentInfo
+  }
+
 }
 
 module.exports = new UserService();

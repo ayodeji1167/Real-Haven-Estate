@@ -39,6 +39,7 @@ const UserSchema = new Schema(
       businessAddress: String,
       businessCategory: String,
     },
+    website_url: {String},
     specialization: {
       type: [String],
     },

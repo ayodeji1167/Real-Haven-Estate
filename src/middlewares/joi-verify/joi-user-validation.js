@@ -49,6 +49,13 @@ const resetCurrentPasswordId = Joi.object().keys({
   id: Joi.string().min(24).max(24).required(),
 });
 
+const verifyAgentProfileInfo = Joi.object().keys({
+  full_name: Joi.string().min(3).max(24),
+  title: Joi.string().min(3).max(100),
+  website_url: Joi.string().uri().allow(''),
+  bio: Joi.string().min(3).max(500)  
+})
+
 module.exports = {
   register,
   login,
@@ -59,4 +66,5 @@ module.exports = {
   resetCurrentPassword,
   resetCurrentPasswordId,
   resetLostPasswordToken,
+  verifyAgentProfileInfo
 };

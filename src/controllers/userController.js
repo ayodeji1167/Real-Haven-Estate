@@ -58,9 +58,6 @@ class UserController {
       .json({ message: constants.MESSAGES.PASSWORD_RESET_SUCCESS });
   };
 
-<<<<<<< HEAD
-
-=======
   getUserByIdHandler = async (req, res) => {
     const user = await UserService.getUserById(req);
     res.status(200).send(user);
@@ -71,11 +68,15 @@ class UserController {
     res.status(200).send(isValid);
   };
 
+  updateAgentInfo = async (req,res) => {
+    const updatedAgentInfo = await UserService.updateAgentProfile(req)
+    res.status(200).json(updatedAgentInfo)
+  }
+
   saveOauthUserHandler = async (req, res) => {
     const responseObject = await UserService.saveAuthUser(req);
     res.status(200).send(responseObject);
   };
->>>>>>> ce95842102cf2d69c420656344bd3d96d1847350
 }
 
 module.exports = new UserController();

@@ -12,7 +12,10 @@ const {
   resetLostPasswordToken,
   resetCurrentPassword,
   resetCurrentPasswordId,
+  verifyAgentProfileInfo
 } = require('../middlewares/joi-verify/joi-user-validation');
+
+const {protect, authorize} = require('../middlewares/protect-route')
 
 const userRouter = Router();
 
@@ -37,6 +40,8 @@ userRouter.put(
   UserController.resetCurrentPasswordHandler,
 );
 userRouter.get('/confirmaccount/:token', validator.params(confirmEmailToken), UserController.confirmAccountHandler);
+
+userRouter.put("/update-agent-profile/:id", protect, authorize('agent'),  validator.body(verifyAgentProfileInfo) ,UserController.updateAgentInfo)
 
 
 module.exports = userRouter;
