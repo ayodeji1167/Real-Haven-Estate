@@ -17,7 +17,7 @@ class PropertyService {
      * const files =  {mainImage: [file1,file2], file:[file1,file2]}
      */
 
-    const { mainImage, file } = req.files;
+    const { mainImage, file } = await req.files;
 
     const otherImagesUrl = [];
     const otherImagesPublicId = [];
@@ -84,9 +84,7 @@ class PropertyService {
     const pageNo = Number(req.query.pageNo) || 1;
     const noToSkip = (pageNo - 1) * pageSize;
 
-    // const queryObject = await this.getQueryObject(req);
-    const queryObject = { stateOfBuilding: { $all: ['Furnished', 'Serviced'] } };
-    console.log(queryObject);
+    const queryObject = await this.getQueryObject(req);
     const properties = await PropertyModel.find(queryObject).sort({ createdAt: -1 })
       .skip(noToSkip).limit(pageSize);
     const noOfProperties = await PropertyModel.countDocuments(queryObject);
@@ -95,6 +93,7 @@ class PropertyService {
 
   getQueryObject = async (req) => {
     const {
+      userId,
       noOfBedroom,
       noOfBathroom,
       search,
@@ -105,6 +104,7 @@ class PropertyService {
       state,
       city,
       purpose,
+      propertyType,
     } = req.query;
 
     const queryObject = {};
@@ -113,11 +113,22 @@ class PropertyService {
       const searchRegex = new RegExp(search, 'gi');
       queryObject.title = searchRegex;
     }
+
+    if (userId) {
+      queryObject.userId = userId;
+    }
+    if (propertyType) {
+      queryObject.propertyType = propertyType;
+    }
+
     if (minPrice || maxPrice) {
-      queryObject.price = { $lte: maxPrice || 1000000000, $gte: minPrice || 0 };
+      queryObject.price = {
+        $lte: maxPrice || 1000000000,
+        $gte: minPrice || 0,
+      };
     }
     if (state) {
-      queryObject['location.state'] = state;
+      queryObject.state = state;
     }
     if (purpose) {
       queryObject.purpose = purpose;
@@ -135,7 +146,7 @@ class PropertyService {
       queryObject.stateOfBuilding = stateOfBuilding;
     }
     if (city) {
-      queryObject['location.city'] = city;
+      queryObject.city = city;
     }
     return queryObject;
   };

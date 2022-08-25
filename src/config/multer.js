@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const BadRequestError = require('../error/errors');
