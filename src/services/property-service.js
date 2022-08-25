@@ -16,8 +16,7 @@ class PropertyService {
      * file is the key and value  is array of files
      * const files =  {mainImage: [file1,file2], file:[file1,file2]}
      */
-
-    const { mainImage, file } = req.files;
+    const { mainImage, file } = await req.files;
 
     const otherImagesUrl = [];
     const otherImagesPublicId = [];
