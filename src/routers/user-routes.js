@@ -29,4 +29,5 @@ userRouter.put('/:id/reset-current-password', validator.params(resetCurrentPassw
 UserController.resetCurrentPasswordHandler);
 userRouter.get('/confirmaccount/:token', validator.params(confirmEmailToken), UserController.confirmAccountHandler);
 
+
 module.exports = userRouter;

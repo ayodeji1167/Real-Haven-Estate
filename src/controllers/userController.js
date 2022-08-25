@@ -53,6 +53,8 @@ class UserController {
       .status(200)
       .json({ message: constants.MESSAGES.PASSWORD_RESET_SUCCESS });
   };
+
+
 }
 
 module.exports = new UserController();

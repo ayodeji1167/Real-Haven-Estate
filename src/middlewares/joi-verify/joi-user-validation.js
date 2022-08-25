@@ -6,7 +6,8 @@ const register = Joi.object().keys({
     lastName: Joi.string().min(3).max(20).trim(true).required(),
     email: Joi.string().email().trim(true).pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).required(),
     phoneNumber:Joi.string().pattern(/^(?:(?:(?:\+?234(?:\h1)?|01)\h*)?(?:\(\d{3}\)|\d{3})|\d{4})(?:\W*\d{3})?\W*\d{4}$/).required(),
-    password: Joi.string().min(6).required().strict()
+    password: Joi.string().min(6).required().strict(),
+    role: Joi.string().valid('agent', 'user')
 });
 
 const login = Joi.object().keys({

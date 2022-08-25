@@ -28,6 +28,7 @@ const constants = {
     USER_EXIST: 'User already exists',
     USER_CREATED: 'User created successfully',
     USER_LOGGED: 'User logged in successfully',
+    USER_LOGGED_OUT: 'User logged out in successfully',
     USER_UPDATED: 'User updated successfully',
     USER_NOT_EXIST: 'User does not exist',
     USER_ACTIVITY_GOTTEN: 'User activities gotten successfully',

@@ -166,6 +166,7 @@ class UserService {
     userExist.password = hashedPassword;
     await userExist.save();
   };
+
 }
 
 module.exports = new UserService();
