@@ -81,16 +81,16 @@ const PropertySchema = new Schema({
     type: [String],
   },
 
-  // mainImage: {
-  //   url: {
-  //     type: String,
-  //     required: true,
-  //   },
-  //   cloudinaryId: {
-  //     type: String,
-  //     required: true,
-  //   },
-  // },
+  mainImage: {
+    url: {
+      type: String,
+      required: true,
+    },
+    cloudinaryId: {
+      type: String,
+      required: true,
+    },
+  },
   otherImages: {
     url: {
       type: [String],
