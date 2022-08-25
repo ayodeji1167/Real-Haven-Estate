@@ -4,14 +4,21 @@ dotenv.config();
 
 const constants = {
   APP_NAME: 'REAL HAVEN ESTATE',
-  PORT: process.env.PORT,
+  PORT: process.env.PORT || 5000,
   DATABASE_URI: process.env.DATABASE_URI,
   MYSQL_URL: process.env.DATABASE_URL,
   JWT_PUBLIC_KEY: process.env.JWT_PUBLIC_KEY,
   JWT_USER_LOGIN_EXPIRATION: '2h',
   EMAIL_USER: process.env.EMAIL_USER,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
-  BASE_URL: 'http://localhost:3000/api/v1',
+  BASE_URL: 'https://real-haven.herokuapp.com/api/v1',
+  FRONTEND_URL: 'https://realhaven.herokuapp.com',
+
+  OAUTH: {
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GOOGLE_REDIRECT_URI: process.env.GOOGLE_OAUTH_REDIRECT_URI,
+  },
 
   CLOUDINARY: {
     NAME: process.env.CLOUDINARY_NAME,
@@ -19,9 +26,15 @@ const constants = {
     SECRET_KEY: process.env.CLOUDINARY_SECRET_KEY,
   },
 
+  UPLOAD_PATH: {
+    PROPERTY_IMAGES: 'PROPERTY_IMAGES',
+    PROPERTY_VIDEOS: 'PROPERTY_VIDEOS',
+  },
+
   DB_COLLECTION: {
     USER: 'USER',
     PROPERTY: 'PROPERTY',
+    INSIGHT: 'INSIGHT',
   },
 
   MESSAGES: {
@@ -53,10 +66,6 @@ const constants = {
     PASSWORD_RESET_EMAIL_SENT:
       'The reset password link has been sent to your email address',
     PASSWORD_RESET_SUCCESS: 'Password reset successful',
-    AGENT_EXIST: 'Agent already exists',
-    AGENT_CREATED: 'Agent created successfully',
-    AGENT_UPDATED: 'Agent updated successfully',
-    AGENT_NOT_EXIST: 'Agent does not exist',
     PROPERTY_CREATED: 'You have successfully created a property',
   },
 };

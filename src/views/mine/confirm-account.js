@@ -278,5 +278,4 @@ important;
 </body>
 
 </html> `;
-
 module.exports = confirmAccount;

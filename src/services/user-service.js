@@ -1,6 +1,16 @@
-const BadRequestError = require('../error/bad-request-error');
-const { MESSAGES, BASE_URL } = require('../config/constants');
-const { comparePassword, decryptData, hashPassword } = require('../utils/data-crypto');
+const {
+  UnAuthorizedError,
+  BadRequestError,
+  NotFound,
+  AlreadyExist,
+} = require('../error/errors');
+const { MESSAGES, BASE_URL, FRONTEND_URL } = require('../config/constants');
+const {
+  comparePassword,
+  decryptData,
+  hashPassword,
+  createJwt,
+} = require('../utils/data-crypto');
 
 const sendEmail = require('../utils/email');
 const UserModel = require('../models/user-model');
@@ -12,7 +22,7 @@ class UserService {
     const userExist = await UserModel.findOne({ email });
 
     if (userExist) {
-      throw new BadRequestError(MESSAGES.USER_EXIST);
+      throw new AlreadyExist(MESSAGES.USER_EXIST);
     }
 
     // This creates and save the user
@@ -23,10 +33,10 @@ class UserService {
     const token = await newUser.createAndSignJwtToken();
     await newUser.save();
 
-    //  Send Email To User
+    //  Send Email For Verification To User
     const link = `${BASE_URL}/user/confirmaccount/${token}`;
-    await sendEmail(email, 'Verify Your Account', { firstName, link });
-    return newUser;
+    await sendEmail(email, 'Verify Email Haven', { firstName, link });
+    return { email: newUser.email, id: newUser._id };
   };
 
   confirmRegisteredEmail = async (req) => {
@@ -45,6 +55,18 @@ class UserService {
       { isValid: true },
       { new: true },
     );
+    const { email, firstName, role } = user;
+    const link = 'https://realhaven.herokuapp.com';
+
+    // After Verification, sends welcome email to the user or Agent
+    if (role === 'user') {
+      await sendEmail(email, 'Welcome To Haven User', { firstName, link });
+    } else {
+      await sendEmail(email, 'Welcome To Haven Agent', {
+        firstName,
+        link: 'https://realhaven.herokuapp.com/dashboard',
+      });
+    }
 
     return user;
   };
@@ -54,7 +76,7 @@ class UserService {
     const userExist = await UserModel.findOne({ email });
 
     if (!userExist) {
-      throw new BadRequestError(MESSAGES.USER_NOT_EXIST);
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
 
     if (userExist.isValid) {
@@ -77,16 +99,16 @@ class UserService {
 
     const userExist = await UserModel.findOne({ email }).select('+password');
     if (!userExist) {
-      throw new BadRequestError(MESSAGES.USER_NOT_EXIST);
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
     if (userExist.isValid !== true) {
-      throw new BadRequestError(MESSAGES.CONFIRM_EMAIL);
+      throw new UnAuthorizedError(MESSAGES.CONFIRM_EMAIL);
     }
 
     const isMatch = await comparePassword(password, userExist.password);
 
     if (!isMatch) {
-      throw new BadRequestError(MESSAGES.INVALID_PASSWORD);
+      throw new UnAuthorizedError(MESSAGES.INVALID_PASSWORD);
     }
 
     const token = await userExist.createAndSignJwtToken();
@@ -104,16 +126,15 @@ class UserService {
     const userExist = await UserModel.findOne({ email });
 
     if (!userExist) {
-      throw new BadRequestError(MESSAGES.USER_NOT_EXIST);
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
     if (!userExist.isValid) {
       throw new BadRequestError('Your account is not verified');
     }
 
     const token = await userExist.createAndSignJwtToken();
-    const link = `${BASE_URL}/user/reset-lost-password/${token}`;
-    await sendEmail(email, 'Password Reset Request', {
-      email,
+    const link = `${FRONTEND_URL}/reset/password/${token}`;
+    await sendEmail(email, 'We Recieved A Request', {
       link,
     });
 
@@ -131,7 +152,7 @@ class UserService {
     const userExist = await UserModel.findById(id);
 
     if (!userExist) {
-      throw new BadRequestError(MESSAGES.USER_NOT_EXIST);
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
 
     if (token !== userExist.resetPasswordToken) {
@@ -142,9 +163,15 @@ class UserService {
 
     userExist.resetPasswordToken = undefined;
     userExist.password = hashedPassword;
-    userExist.save();
+    await userExist.save();
 
     // Send email to user that their email has been reset
+    const { firstName, email } = userExist;
+    const link = 'https://realhaven.herokuapp.com/login';
+    await sendEmail(email, 'Operation Successfull', {
+      firstName,
+      link,
+    });
   };
 
   resetCurrentPassword = async (req) => {
@@ -154,7 +181,7 @@ class UserService {
     const userExist = await UserModel.findById(userId).select('+password');
 
     if (!userExist) {
-      throw new BadRequestError(MESSAGES.USER_NOT_EXIST);
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
 
     const isMatch = await comparePassword(currentPassword, userExist.password);
@@ -165,6 +192,63 @@ class UserService {
     const hashedPassword = await hashPassword(newPassword);
     userExist.password = hashedPassword;
     await userExist.save();
+  };
+
+  getUserById = async (req) => {
+    const { id } = req.params;
+    if (!id) {
+      throw new BadRequestError('Input Id');
+    }
+    const user = await UserModel.findById(id);
+    if (!user) {
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
+    }
+    return user;
+  };
+
+  checkUserValidity = async (req) => {
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+    if (!user) {
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
+    }
+    if (user.isValid) {
+      return true;
+    }
+    return false;
+  };
+
+  saveAuthUser = async (req) => {
+    const {
+      email, firstName, lastName, image,
+    } = req.body;
+    if (!email) {
+      throw new BadRequestError('No email sent');
+    }
+
+    const user = await UserModel.findOneAndUpdate(
+      {
+        email,
+      },
+      {
+        email,
+        'image.url': image,
+        isValid: true,
+        firstName,
+        lastName,
+      },
+      { upsert: true, new: true },
+    );
+
+    const token = await createJwt({ id: user._id, email: user.email }, '12h');
+
+    const responseObject = {
+      sucess: true,
+      user,
+      token,
+    };
+    // redirect
+    return responseObject;
   };
 }
 

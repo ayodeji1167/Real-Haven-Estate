@@ -11,13 +11,17 @@ class UserController {
   };
 
   confirmAccountHandler = async (req, res) => {
-    await UserService.confirmRegisteredEmail(req);
-    res.status(200).json({ message: constants.MESSAGES.EMAIL_CONFIRMED });
+    const result = await UserService.confirmRegisteredEmail(req);
+    if (!result) {
+      res.status(403).json({ mesage: constants.MESSAGES.USER_NOT_EXIST });
+    } else {
+      res.redirect('https://realhaven.herokuapp.com/login');
+    }
   };
 
   resendEmailConfirmation = async (req, res) => {
     await UserService.resendConfirmation(req);
-    res.status(200).json({ message: constants.MESSAGES.EMAIL_CONFIRMED });
+    res.status(200).json({ message: constants.MESSAGES.CONFIRM_EMAIL });
   };
 
   loginHandler = async (req, res) => {
@@ -52,6 +56,21 @@ class UserController {
     res
       .status(200)
       .json({ message: constants.MESSAGES.PASSWORD_RESET_SUCCESS });
+  };
+
+  getUserByIdHandler = async (req, res) => {
+    const user = await UserService.getUserById(req);
+    res.status(200).send(user);
+  };
+
+  checkUserValidityHandler = async (req, res) => {
+    const isValid = await UserService.checkUserValidity(req);
+    res.status(200).send(isValid);
+  };
+
+  saveOauthUserHandler = async (req, res) => {
+    const responseObject = await UserService.saveAuthUser(req);
+    res.status(200).send(responseObject);
   };
 }
 
