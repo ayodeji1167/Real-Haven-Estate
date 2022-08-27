@@ -17,6 +17,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/', (req, res) => res.send('welcome to haven'));
 app.use('/api/sessions', authRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/property', propertyRouter);
@@ -28,3 +29,5 @@ const start = async () => {
   app.listen(PORT, () => console.log(`App started at port ${PORT} `));
 };
 start();
+
+module.exports = app;
