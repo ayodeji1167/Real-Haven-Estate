@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => res.send('welcome to haven alalal'));
+app.get('/', (req, res) => res.send('welcome to haven alalal again'));
 app.use('/api/sessions', authRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/property', propertyRouter);
