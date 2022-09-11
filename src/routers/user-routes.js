@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const validator = require('express-joi-validation').createValidator({});
+const upload = require('../config/multer')
 
 const UserController = require('../controllers/userController');
 const {
@@ -41,7 +42,11 @@ userRouter.put(
 );
 userRouter.get('/confirmaccount/:token', validator.params(confirmEmailToken), UserController.confirmAccountHandler);
 
-userRouter.put("/update-agent-profile/:id", protect, authorize('agent'),  validator.body(verifyAgentProfileInfo) ,UserController.updateAgentInfo)
+userRouter.put("/update-agent-profile/:id", protect, authorize('agent'), 
+upload.fields([
+  { name: 'mainImage', maxCount: 1 },
+  { name: 'businessLogo', maxCount: 1 }]),
+UserController.updateAgentProfileHandler)
 
 
 module.exports = userRouter;

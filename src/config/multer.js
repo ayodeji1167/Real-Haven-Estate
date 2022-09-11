@@ -1,11 +1,9 @@
 const path = require('path');
 const multer = require('multer');
 const BadRequestError = require('../error/errors');
+const fs = require('fs')
 
 // Set Up How File Are stored
-<<<<<<< HEAD
-const storage = multer.diskStorage({});
-=======
 const storage = multer.diskStorage({
   destination(req, file, callback) {
     let dir = process.cwd();
@@ -31,7 +29,6 @@ const storage = multer.diskStorage({
     callback(null, `${Date.now()}_${file.originalname}`);
   },
 });
->>>>>>> 19f05797545e122906c44283b5a990e76bb07b47
 
 // Set File Filter( Validate Files)
 

@@ -4,7 +4,9 @@ const {
   NotFound,
   AlreadyExist,
 } = require('../error/errors');
-const { MESSAGES, BASE_URL, FRONTEND_URL } = require('../config/constants');
+const {
+  MESSAGES, BASE_URL, FRONTEND_URL, UPLOAD_PATH,
+} = require('../config/constants');
 const {
   comparePassword,
   decryptData,
@@ -12,6 +14,7 @@ const {
   createJwt,
 } = require('../utils/data-crypto');
 
+const { uploadSingleFile } = require('../config/cloudinary');
 const sendEmail = require('../utils/email');
 const UserModel = require('../models/user-model');
 
@@ -251,38 +254,70 @@ class UserService {
     return responseObject;
   };
 
-  async updateAgentProfile(req){
-    const {full_name, title, website_url, bio } = req.body
-    const userId = req.params.id 
-    const user = await UserModel.findById(userId)
+  async updateAgentProfile(req) {
+    const userId = req.params.id;
+    let user = await UserModel.findById(userId);
+    
+    const { businessName } = req.body;
+    const { mainImage, businessLogo } = req.files;
 
-    if(!user){
+    let mainImageSecureUrl;
+    let mainImagePublicId;
+    let businessLogoSecureUrl;
+    let businessLogoPublicId;
+
+    if (!user) {
       throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
 
-    const splitedNames = full_name.split(' ')
-    
-    const updateAgentFields = {}
-    if(full_name){
-      updateAgentFields.firstName = splitedNames[0]
-      updateAgentFields.lastName = splitedNames[1]
+    try {
+      const mainImageUpload = await uploadSingleFile(
+        mainImage[0].path,
+        UPLOAD_PATH.PROPERTY_IMAGES,
+
+        'image',
+      );
+      mainImageSecureUrl = mainImageUpload.secure_url
+      mainImagePublicId = mainImageUpload.public_id
+        
+    } catch (error) {
+      console.log(error)
     }
 
-    if(bio){
-      updateAgentFields.bio = bio.trim()
+    try {
+      const businessLogoUpload = await uploadSingleFile(
+      businessLogo[0].path,
+        UPLOAD_PATH.PROPERTY_IMAGES,
+
+        'image',
+      );
+      businessLogoSecureUrl = businessLogoUpload.secure_url
+      businessLogoPublicId = businessLogoUpload.public_id
+        
+    } catch (error) {
+      console.log(error)
     }
-  
-    if(title){
-      updateAgentFields.title = title.trim()
-    }
-    
-    if(website_url){
-    updateAgentFields.website_url = website_url.trim()
-    }
-    
-    const updateAgentInfo = await UserModel.findByIdAndUpdate(userId, updateAgentFields, {new:true})
-    return updateAgentInfo
+
+    user = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        ...req.body,
+      businessInformation: {  businessName },
+      mainImage: {
+        url: mainImageSecureUrl,
+        publicId: mainImagePublicId
+      },
+      businessLogo:{
+        url: businessLogoSecureUrl,
+        publicId: businessLogoPublicId
+      }
+      },
+      { new: true, upsert:true },
+    );
+   
+    return user;
   }
+
 
 }
 
