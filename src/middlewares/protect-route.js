@@ -1,5 +1,5 @@
 const { MESSAGES } = require('../config/constants');
-const BadRequestError = require('../error/bad-request-error');
+const {BadRequestError} = require('../error/errors');
 const { decryptData } = require('../utils/data-crypto');
 const UserModel = require('../models/user-model');
 

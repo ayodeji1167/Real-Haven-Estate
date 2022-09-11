@@ -72,6 +72,11 @@ class UserController {
     const responseObject = await UserService.saveAuthUser(req);
     res.status(200).send(responseObject);
   };
+
+  editAgentProfileHandler = async (req,res) => {
+    const updatedProfile = await UserService.editAgentProfile(req)
+    res.status(200).send(updatedProfile)
+  }
 }
 
 module.exports = new UserController();

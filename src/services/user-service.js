@@ -1,16 +1,18 @@
+/* eslint-disable no-unused-vars */
 const {
   UnAuthorizedError,
   BadRequestError,
   NotFound,
   AlreadyExist,
 } = require('../error/errors');
-const { MESSAGES, BASE_URL, FRONTEND_URL } = require('../config/constants');
+const { MESSAGES, BASE_URL, FRONTEND_URL, UPLOAD_PATH } = require('../config/constants');
 const {
   comparePassword,
   decryptData,
   hashPassword,
   createJwt,
 } = require('../utils/data-crypto');
+const { uploadSingleFile } = require('../config/cloudinary');
 
 const sendEmail = require('../utils/email');
 const UserModel = require('../models/user-model');
@@ -250,6 +252,76 @@ class UserService {
     // redirect
     return responseObject;
   };
+
+  async editAgentProfile(req) {
+   
+    const userId = req.params.id;
+    let user = await UserModel.findById(userId);
+    const {businessName} = req.body
+    const mainImage = req.files.mainImage[0]
+    const businessLogo = req.files.businessLogo[0]
+    let secure_main_url,
+        public_main_id,
+        secure_businessLogo_url,
+        public_businessLogo_id
+              
+
+
+
+    if (!user) {
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
+    }
+    // eslint-disable-next-line no-trailing-spaces
+   
+    if(mainImage){
+      try{
+        const mainImageUpload = await uploadSingleFile(
+          mainImage.path,
+          UPLOAD_PATH.PROPERTY_IMAGES,
+    
+          'image',
+        ); 
+       secure_main_url = mainImageUpload.secure_url
+       public_main_id = mainImageUpload.public_id
+      }catch(err){
+        console.log(err)
+      }
+      
+    }
+
+    if(businessLogo){
+      try{
+        const businessLogoImageUpload = await uploadSingleFile(
+          businessLogo.path,
+          UPLOAD_PATH.PROPERTY_IMAGES,  
+    
+          'image',
+        ); 
+        secure_businessLogo_url = businessLogoImageUpload.secure_url
+        public_businessLogo_id = businessLogoImageUpload.public_id
+        console.log(businessLogoImageUpload)  
+      }catch(err){
+        console.log(err)
+      } 
+    }
+
+    user = await UserModel.findByIdAndUpdate(userId, {
+      ...req.body,
+      businessInformation:{
+        businessName
+      },
+      mainImage: {
+        url: secure_main_url,
+        publicId: public_main_id,
+      },
+      businessLogo: {
+        url: secure_businessLogo_url,
+        publicId: public_businessLogo_id,
+      }
+    }, {new:true, upsert:true})
+
+    return user;
+  }
 }
 
 module.exports = new UserService();

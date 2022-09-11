@@ -42,10 +42,13 @@ const UserSchema = new Schema(
     specialization: {
       type: [String],
     },
+    country: String,
+    timeZone: String,
+    website:String,
     password: {
       type: String,
       required: true,
-      select: false,
+      select: false,  
     },
     role: {
       type: String,
@@ -53,15 +56,22 @@ const UserSchema = new Schema(
       default: 'user',
     },
 
-    image: {
-      publicId: {
-        type: String,
-      },
+    mainImage: {
       url: {
         type: String,
       },
+      publicId: {
+        type: String,
+      }
     },
-
+    businessLogo:{
+      url: {
+        type: String,
+      },
+      publicId: {
+        type: String,
+      }
+    },
     noOfPropertyListed: {
       type: Number,
     },
