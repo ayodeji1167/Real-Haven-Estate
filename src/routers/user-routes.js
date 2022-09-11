@@ -43,6 +43,7 @@ userRouter.put(
 userRouter.get('/confirmaccount/:token', validator.params(confirmEmailToken), UserController.confirmAccountHandler);
 
 userRouter.put("/update-agent-profile/:id", protect, authorize('agent'), 
+validator.body(verifyAgentProfileInfo),
 upload.fields([
   { name: 'mainImage', maxCount: 1 },
   { name: 'businessLogo', maxCount: 1 }]),
