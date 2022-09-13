@@ -73,10 +73,10 @@ class UserController {
     res.status(200).send(responseObject);
   };
 
-  updateAgentProfileHandler = async (req,res) => {
-    const updatedAgentInfo = await UserService.updateAgentProfile(req)
-    res.status(200).json(updatedAgentInfo)
-  }
+  updateAgentProfileHandler = async (req, res) => {
+    const updatedAgentInfo = await UserService.updateAgentProfile(req);
+    res.status(200).json(updatedAgentInfo);
+  };
 }
 
 module.exports = new UserController();

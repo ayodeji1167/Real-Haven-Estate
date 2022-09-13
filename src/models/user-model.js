@@ -1,5 +1,4 @@
 /* eslint-disable no-shadow */
-const { number } = require('joi');
 const { Schema, model } = require('mongoose');
 const { DB_COLLECTION } = require('../config/constants');
 const { createJwt } = require('../utils/data-crypto');
@@ -40,7 +39,7 @@ const UserSchema = new Schema(
       businessAddress: String,
       businessCategory: String,
     },
-    website_url: {String},
+    website_url: { String },
     specialization: {
       type: [String],
     },
@@ -61,25 +60,25 @@ const UserSchema = new Schema(
       },
       publicId: {
         type: String,
-      }
+      },
     },
 
-    businessLogo:{
+    businessLogo: {
       url: {
         type: String,
       },
       publicId: {
         type: String,
-      }
+      },
     },
-    timeZone:String,
-    country:String,
+    timeZone: String,
+    country: String,
     noOfPropertyListed: {
       type: Number,
     },
 
     noOfPropertySold: {
-      type: Number
+      type: Number,
     },
 
     noOfClients: {

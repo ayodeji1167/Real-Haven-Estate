@@ -257,7 +257,7 @@ class UserService {
   async updateAgentProfile(req) {
     const userId = req.params.id;
     let user = await UserModel.findById(userId);
-    
+
     const { businessName } = req.body;
     const { mainImage, businessLogo } = req.files;
 
@@ -277,49 +277,44 @@ class UserService {
 
         'image',
       );
-      mainImageSecureUrl = mainImageUpload.secure_url
-      mainImagePublicId = mainImageUpload.public_id
-        
+      mainImageSecureUrl = mainImageUpload.secure_url;
+      mainImagePublicId = mainImageUpload.public_id;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
 
     try {
       const businessLogoUpload = await uploadSingleFile(
-      businessLogo[0].path,
+        businessLogo[0].path,
         UPLOAD_PATH.PROPERTY_IMAGES,
 
         'image',
       );
-      businessLogoSecureUrl = businessLogoUpload.secure_url
-      businessLogoPublicId = businessLogoUpload.public_id
-        
+      businessLogoSecureUrl = businessLogoUpload.secure_url;
+      businessLogoPublicId = businessLogoUpload.public_id;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
 
     user = await UserModel.findByIdAndUpdate(
       userId,
       {
         ...req.body,
-      businessInformation: {  businessName },
-      mainImage: {
-        url: mainImageSecureUrl,
-        publicId: mainImagePublicId
+        businessInformation: { businessName },
+        mainImage: {
+          url: mainImageSecureUrl,
+          publicId: mainImagePublicId,
+        },
+        businessLogo: {
+          url: businessLogoSecureUrl,
+          publicId: businessLogoPublicId,
+        },
       },
-      businessLogo:{
-        url: businessLogoSecureUrl,
-        publicId: businessLogoPublicId
-      }
-      },
-      { new: true, upsert:true },
+      { new: true, upsert: true },
     );
-   
+
     return user;
   }
-
-
-  
 }
 
 module.exports = new UserService();
