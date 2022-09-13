@@ -273,7 +273,7 @@ class UserService {
     try {
       const mainImageUpload = await uploadSingleFile(
         mainImage[0].path,
-        UPLOAD_PATH.PROPERTY_IMAGES,
+        UPLOAD_PATH.AGENT_MAIN_IMAGE,
 
         'image',
       );
@@ -286,7 +286,7 @@ class UserService {
     try {
       const businessLogoUpload = await uploadSingleFile(
         businessLogo[0].path,
-        UPLOAD_PATH.PROPERTY_IMAGES,
+        UPLOAD_PATH.AGENT_BUSINESS_LOGO,
 
         'image',
       );
@@ -312,7 +312,7 @@ class UserService {
       },
       { new: true, upsert: true },
     );
-
+      
     return user;
   }
 }
