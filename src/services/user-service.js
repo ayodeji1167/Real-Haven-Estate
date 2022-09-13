@@ -1,20 +1,19 @@
+/* eslint-disable no-unused-vars */
 const {
   UnAuthorizedError,
   BadRequestError,
   NotFound,
   AlreadyExist,
 } = require('../error/errors');
-const {
-  MESSAGES, BASE_URL, FRONTEND_URL, UPLOAD_PATH,
-} = require('../config/constants');
+const { MESSAGES, BASE_URL, FRONTEND_URL, UPLOAD_PATH } = require('../config/constants');
 const {
   comparePassword,
   decryptData,
   hashPassword,
   createJwt,
 } = require('../utils/data-crypto');
-
 const { uploadSingleFile } = require('../config/cloudinary');
+
 const sendEmail = require('../utils/email');
 const UserModel = require('../models/user-model');
 
@@ -254,65 +253,73 @@ class UserService {
     return responseObject;
   };
 
-  async updateAgentProfile(req) {
+  async editAgentProfile(req) {
+   
     const userId = req.params.id;
     let user = await UserModel.findById(userId);
+    const {businessName} = req.body
+    const mainImage = req.files.mainImage[0]
+    const businessLogo = req.files.businessLogo[0]
+    let secure_main_url,
+        public_main_id,
+        secure_businessLogo_url,
+        public_businessLogo_id
+              
 
-    const { businessName } = req.body;
-    const { mainImage, businessLogo } = req.files;
 
-    let mainImageSecureUrl;
-    let mainImagePublicId;
-    let businessLogoSecureUrl;
-    let businessLogoPublicId;
 
     if (!user) {
       throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
-
-    try {
-      const mainImageUpload = await uploadSingleFile(
-        mainImage[0].path,
-        UPLOAD_PATH.AGENT_MAIN_IMAGE,
-
-        'image',
-      );
-      mainImageSecureUrl = mainImageUpload.secure_url;
-      mainImagePublicId = mainImageUpload.public_id;
-    } catch (error) {
-      console.log(error);
-    }
-
-    try {
-      const businessLogoUpload = await uploadSingleFile(
-        businessLogo[0].path,
-        UPLOAD_PATH.AGENT_BUSINESS_LOGO,
-
-        'image',
-      );
-      businessLogoSecureUrl = businessLogoUpload.secure_url;
-      businessLogoPublicId = businessLogoUpload.public_id;
-    } catch (error) {
-      console.log(error);
-    }
-
-    user = await UserModel.findByIdAndUpdate(
-      userId,
-      {
-        ...req.body,
-        businessInformation: { businessName },
-        mainImage: {
-          url: mainImageSecureUrl,
-          publicId: mainImagePublicId,
-        },
-        businessLogo: {
-          url: businessLogoSecureUrl,
-          publicId: businessLogoPublicId,
-        },
-      },
-      { new: true, upsert: true },
-    );
+    // eslint-disable-next-line no-trailing-spaces
+   
+    if(mainImage){
+      try{
+        const mainImageUpload = await uploadSingleFile(
+          mainImage.path,
+          UPLOAD_PATH.AGENT_MAIN_IMAGE,
+    
+          'image',
+        ); 
+       secure_main_url = mainImageUpload.secure_url
+       public_main_id = mainImageUpload.public_id
+      }catch(err){
+        console.log(err)
+      }
       
+    }
+
+    if(businessLogo){
+      try{
+        const businessLogoImageUpload = await uploadSingleFile(
+          businessLogo.path,
+          UPLOAD_PATH.AGENT_BUSINESS_LOGO,  
+    
+          'image',
+        ); 
+        secure_businessLogo_url = businessLogoImageUpload.secure_url
+        public_businessLogo_id = businessLogoImageUpload.public_id
+ 
+      }catch(err){
+        console.log(err)
+      } 
+    }
+
+    user = await UserModel.findByIdAndUpdate(userId, {
+      ...req.body,
+      businessInformation:{
+        businessName
+      },
+      mainImage: {
+        url: secure_main_url,
+        publicId: public_main_id,
+      },
+      businessLogo: {
+        url: secure_businessLogo_url,
+        publicId: public_businessLogo_id,
+      }
+    }, {new:true, upsert:true})
+
     return user;
   }
 }

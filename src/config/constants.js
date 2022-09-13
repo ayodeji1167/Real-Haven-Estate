@@ -14,7 +14,7 @@ const constants = {
   BASE_URL: 'https://real-haven.herokuapp.com/api/v1',
   FRONTEND_URL: 'https://realhaven.herokuapp.com',
 
-  OAUTH: {
+  OAUTH: { 
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GOOGLE_REDIRECT_URI: process.env.GOOGLE_OAUTH_REDIRECT_URI,

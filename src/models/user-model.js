@@ -43,10 +43,13 @@ const UserSchema = new Schema(
     specialization: {
       type: [String],
     },
+    country: String,
+    timeZone: String,
+    website:String,
     password: {
       type: String,
       required: true,
-      select: false,
+      select: false,  
     },
     role: {
       type: String,
@@ -60,19 +63,16 @@ const UserSchema = new Schema(
       },
       publicId: {
         type: String,
-      },
+      }
     },
-
-    businessLogo: {
+    businessLogo:{
       url: {
         type: String,
       },
       publicId: {
         type: String,
-      },
+      }
     },
-    timeZone: String,
-    country: String,
     noOfPropertyListed: {
       type: Number,
     },
