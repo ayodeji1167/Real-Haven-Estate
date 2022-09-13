@@ -12,7 +12,7 @@ const protect = async (req, res, next) => {
   if (!token) {
     throw new BadRequestError(MESSAGES.INVALID_TOKEN);
   }
-
+ 
   try {
     const user = await decryptData(token);
     req.user = await UserModel.findById(user.id);
