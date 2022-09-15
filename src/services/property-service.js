@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-shadow */
 /* eslint-disable no-continue */
 /* eslint-disable camelcase */
@@ -85,12 +86,17 @@ class PropertyService {
     const noToSkip = (pageNo - 1) * pageSize;
 
     const queryObject = await this.getQueryObject(req);
-    // eslint-disable-next-line max-len
-    const properties = await PropertyModel.find(...queryObject, { propertyType: { $in: queryObject.propertyType } }).sort({ createdAt: -1 })
+
+    const result = await PropertyModel.find({ ...queryObject, ...(queryObject.propertyType ? { propertyType: { $in: queryObject.propertyType } } : {}) })
+      .sort({ createdAt: -1 })
       .skip(noToSkip).limit(pageSize);
-    const noOfProperties = await PropertyModel
-      .countDocuments(...queryObject, { propertyType: { $in: queryObject.propertyType } });
-    return { properties, noOfProperties, pageNo };
+    return { properties: result, pageNo };
+
+    // result = await PropertyModel.find(queryObject).sort({ createdAt: -1 })
+    //   .skip(noToSkip).limit(pageSize);
+    // return { properties: result, pageNo };
+    // const noOfProperties = await PropertyModel
+    //   .countDocuments(...queryObject, { propertyType: { $in: queryObject.propertyType } });
   };
 
   getQueryObject = async (req) => {
