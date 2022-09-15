@@ -80,14 +80,16 @@ class PropertyService {
   };
 
   getAllProperties = async (req) => {
-    const pageSize = Number(req.query.pageSize) || 10;
+    const pageSize = Number(req.query.pageSize) || 20;
     const pageNo = Number(req.query.pageNo) || 1;
     const noToSkip = (pageNo - 1) * pageSize;
 
     const queryObject = await this.getQueryObject(req);
-    const properties = await PropertyModel.find(queryObject).sort({ createdAt: -1 })
+    // eslint-disable-next-line max-len
+    const properties = await PropertyModel.find(...queryObject, { propertyType: { $in: queryObject.propertyType } }).sort({ createdAt: -1 })
       .skip(noToSkip).limit(pageSize);
-    const noOfProperties = await PropertyModel.countDocuments(queryObject);
+    const noOfProperties = await PropertyModel
+      .countDocuments(...queryObject, { propertyType: { $in: queryObject.propertyType } });
     return { properties, noOfProperties, pageNo };
   };
 

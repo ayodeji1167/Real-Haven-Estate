@@ -1,6 +1,6 @@
 const path = require('path');
 const multer = require('multer');
-const BadRequestError = require('../error/errors');
+const { BadRequestError } = require('../error/errors');
 
 // Set Up How File Are stored
 const storage = multer.diskStorage({});

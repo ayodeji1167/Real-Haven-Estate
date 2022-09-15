@@ -9,6 +9,11 @@ class PropertyController {
     });
   };
 
+  getPropertyById = async (req, res) => {
+    const property = await PropertyService.getPropertyById(req);
+    res.status(200).json(property);
+  };
+
   getAllProperties = async (req, res) => {
     const properties = await PropertyService.getAllProperties(req);
     res.status(200).send(properties);
