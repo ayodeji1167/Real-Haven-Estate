@@ -78,8 +78,8 @@ const PropertySchema = new Schema({
     required: true,
   },
 
-  currency: {
-    type: String,
+  promoted: {
+    type: Boolean,
   },
   additionalFeatures: {
     type: [String],

@@ -10,6 +10,16 @@ class UserController {
     });
   };
 
+  uploadCoverPhoto = async (req, res) => {
+    const user = await UserService.uploadCoverPhoto(req);
+    res.status(200).json(user);
+  };
+
+  uploadProfilePhoto = async (req, res) => {
+    const user = await UserService.uploadProfilePhoto(req);
+    res.status(200).json(user);
+  };
+
   confirmAccountHandler = async (req, res) => {
     const result = await UserService.confirmRegisteredEmail(req);
     if (!result) {

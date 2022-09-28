@@ -15,4 +15,5 @@ router.post(
 router.get('/find/one/:id', propertyController.getPropertyById);
 router.get('/find', PropertyController.getAllProperties);
 router.put('/edit/:id', PropertyController.updateProperty);
+router.delete('/:id', PropertyController.deleteProperty);
 module.exports = router;

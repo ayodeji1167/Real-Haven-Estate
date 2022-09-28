@@ -5,7 +5,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 const PropertyModel = require('../models/property-model');
-const { uploadSingleFile } = require('../config/cloudinary');
+const { uploadSingleFile, deleteMultiple } = require('../config/cloudinary');
 const { UPLOAD_PATH } = require('../config/constants');
 const BadRequestError = require('../error/errors');
 
@@ -97,6 +97,13 @@ class PropertyService {
     // return { properties: result, pageNo };
     // const noOfProperties = await PropertyModel
     //   .countDocuments(...queryObject, { propertyType: { $in: queryObject.propertyType } });
+  };
+
+  deleteProperty = async (req) => {
+    const { id } = req.params;
+    const { mainImage, otherImages } = await PropertyModel.findById(id);
+    await deleteMultiple([...otherImages.cloudinaryId, mainImage.cloudinaryId], 'image');
+    await PropertyModel.deleteOne({ _id: id });
   };
 
   getQueryObject = async (req) => {

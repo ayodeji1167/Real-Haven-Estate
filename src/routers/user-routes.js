@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const validator = require('express-joi-validation').createValidator({});
+const upload = require('../config/multer');
 
 const UserController = require('../controllers/userController');
 const {
@@ -37,5 +38,7 @@ userRouter.put(
   UserController.resetCurrentPasswordHandler,
 );
 userRouter.get('/confirmaccount/:token', validator.params(confirmEmailToken), UserController.confirmAccountHandler);
+userRouter.put('/profile/photo/:id', upload.single('file'), UserController.uploadProfilePhoto);
+userRouter.put('/cover/photo/:id', upload.single('file'), UserController.uploadCoverPhoto);
 
 module.exports = userRouter;
