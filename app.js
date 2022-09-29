@@ -1,4 +1,4 @@
-// require('express-async-errors');
+require('express-async-errors');
 const express = require('express');
 const cors = require('cors');
 const { PORT } = require('./src/config/constants');
@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => res.send('welcome to haven alalal again'));
+app.get('/', (req, res) => res.send('welcome to haven haven again'));
 app.use('/api/sessions', authRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/property', propertyRouter);
