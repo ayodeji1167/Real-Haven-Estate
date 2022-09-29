@@ -53,7 +53,7 @@ const UserSchema = new Schema(
       default: 'user',
     },
 
-    profilePhoto: {
+    image: {
       publicId: {
         type: String,
       },
