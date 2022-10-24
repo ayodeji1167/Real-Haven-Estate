@@ -10,6 +10,16 @@ class UserController {
     });
   };
 
+  uploadCoverPhoto = async (req, res) => {
+    const user = await UserService.uploadCoverPhoto(req);
+    res.status(200).json(user);
+  };
+
+  uploadProfilePhoto = async (req, res) => {
+    const user = await UserService.uploadProfilePhoto(req);
+    res.status(200).json(user);
+  };
+
   getUserByBusinessName = async (req, res) => {
     const user = await UserService.getUserByBusinessName(req);
     res.status(200).json({
@@ -40,9 +50,11 @@ class UserController {
       user: responseUser,
     });
   };
+
   get loginHandler() {
     return this._loginHandler;
   }
+
   set loginHandler(value) {
     this._loginHandler = value;
   }

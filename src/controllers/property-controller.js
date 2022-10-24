@@ -9,6 +9,12 @@ class PropertyController {
     });
   };
 
+  deleteProperty = async (req, res) => {
+    await PropertyService.deleteProperty(req);
+    res.status(200).json({ message: 'Property Deletd Succesfully' });
+  };
+
+
   postPropertyForDraft = async (req, res) => {
     const property = await PropertyService.createPropertyDraft(req);
     res.status(200).json({

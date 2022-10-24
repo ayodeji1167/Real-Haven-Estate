@@ -17,7 +17,6 @@ const {
   verifyAgentProfileInfo,
 } = require('../middlewares/joi-verify/joi-user-validation');
 
-
 const userRouter = Router();
 
 userRouter.post('/register', validator.body(register), UserController.registrationHandler);
@@ -42,6 +41,8 @@ userRouter.put(
   UserController.resetCurrentPasswordHandler,
 );
 userRouter.get('/confirmaccount/:token', validator.params(confirmEmailToken), UserController.confirmAccountHandler);
+userRouter.put('/profile/photo/:id', upload.single('file'), UserController.uploadProfilePhoto);
+userRouter.put('/cover/photo/:id', upload.single('file'), UserController.uploadCoverPhoto);
 
 userRouter.put(
   '/update-agent-profile/:id',

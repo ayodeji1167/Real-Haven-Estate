@@ -19,8 +19,47 @@ const { uploadSingleFile } = require('../config/cloudinary');
 
 const sendEmail = require('../utils/email');
 const UserModel = require('../models/user-model');
+const { USER_IMAGES } = require('../config/constants').UPLOAD_PATH;
 
 class UserService {
+  uploadProfilePhoto = async (req) => {
+    const { path } = req.file;
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+    if (!user) {
+      throw new BadRequestError('No user');
+    }
+    const { secure_url, public_id } = await uploadSingleFile(path, USER_IMAGES, 'image');
+
+    const updatedUser = await UserModel.findByIdAndUpdate(id, {
+      profilePhoto: {
+        url: secure_url,
+        publicId: public_id,
+      },
+    }, { new: true, upsert: true });
+
+    return updatedUser;
+  };
+
+  uploadCoverPhoto = async (req) => {
+    const { path } = req.file;
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+    if (!user) {
+      throw new BadRequestError('No user');
+    }
+    const { secure_url, public_id } = await uploadSingleFile(path, USER_IMAGES, 'image');
+
+    const updatedUser = await UserModel.findByIdAndUpdate(id, {
+      coverPhoto: {
+        url: secure_url,
+        publicId: public_id,
+      },
+    }, { new: true, upsert: true });
+
+    return updatedUser;
+  };
+
   registerUser = async (req) => {
     const { email, firstName, password } = req.body;
 

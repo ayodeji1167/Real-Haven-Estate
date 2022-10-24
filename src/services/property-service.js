@@ -1,10 +1,11 @@
+/* eslint-disable max-len */
 /* eslint-disable no-shadow */
 /* eslint-disable no-continue */
 /* eslint-disable camelcase */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 const PropertyModel = require('../models/property-model');
-const { uploadSingleFile } = require('../config/cloudinary');
+const { uploadSingleFile, deleteMultiple } = require('../config/cloudinary');
 const { UPLOAD_PATH } = require('../config/constants');
 const BadRequestError = require('../error/errors');
 
@@ -124,15 +125,29 @@ class PropertyService {
   };
 
   getAllProperties = async (req) => {
-    const pageSize = Number(req.query.pageSize) || 10;
+    const pageSize = Number(req.query.pageSize) || 20;
     const pageNo = Number(req.query.pageNo) || 1;
     const noToSkip = (pageNo - 1) * pageSize;
 
     const queryObject = await this.getQueryObject(req);
-    const properties = await PropertyModel.find(queryObject).sort({ createdAt: -1 })
+
+    const result = await PropertyModel.find({ ...queryObject, ...(queryObject.propertyType ? { propertyType: { $in: queryObject.propertyType } } : {}) })
+      .sort({ createdAt: -1 })
       .skip(noToSkip).limit(pageSize);
-    const noOfProperties = await PropertyModel.countDocuments(queryObject);
-    return { properties, noOfProperties, pageNo };
+    return { properties: result, pageNo };
+
+    // result = await PropertyModel.find(queryObject).sort({ createdAt: -1 })
+    //   .skip(noToSkip).limit(pageSize);
+    // return { properties: result, pageNo };
+    // const noOfProperties = await PropertyModel
+    //   .countDocuments(...queryObject, { propertyType: { $in: queryObject.propertyType } });
+  };
+
+  deleteProperty = async (req) => {
+    const { id } = req.params;
+    const { mainImage, otherImages } = await PropertyModel.findById(id);
+    await deleteMultiple([...otherImages.cloudinaryId, mainImage.cloudinaryId], 'image');
+    await PropertyModel.deleteOne({ _id: id });
   };
 
   getQueryObject = async (req) => {

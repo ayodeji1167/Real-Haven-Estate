@@ -78,8 +78,8 @@ const PropertySchema = new Schema({
     required: true,
   },
 
-  currency: {
-    type: String,
+  promoted: {
+    type: Boolean,
   },
   additionalFeatures: {
     type: [String],
@@ -103,9 +103,7 @@ const PropertySchema = new Schema({
       type: [String],
     },
   },
-
-  agent: Schema.Types.ObjectId,
-});
+}, { timestamps: true });
 
 const PropertyModel = model(constants.DB_COLLECTION.PROPERTY, PropertySchema);
 module.exports = PropertyModel;

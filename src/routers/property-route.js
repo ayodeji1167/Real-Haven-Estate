@@ -23,4 +23,6 @@ router.post(
 );
 router.get('/find', PropertyController.getAllProperties);
 router.put('/edit/:id', PropertyController.updateProperty);
+router.delete('/:id', PropertyController.deleteProperty);
+
 module.exports = router;
