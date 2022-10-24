@@ -9,6 +9,7 @@ class UserController {
       user,
     });
   };
+
   getUserByBusinessName = async (req, res) => {
     const user = await UserService.getUserByBusinessName(req);
     res.status(200).json({
@@ -31,7 +32,7 @@ class UserController {
     res.status(200).json({ message: constants.MESSAGES.CONFIRM_EMAIL });
   };
 
-  loginHandler = async (req, res) => {
+  _loginHandler = async (req, res) => {
     const { token, responseUser } = await UserService.login(req);
     res.status(200).json({
       message: constants.MESSAGES.USER_LOGGED,
@@ -39,6 +40,12 @@ class UserController {
       user: responseUser,
     });
   };
+  get loginHandler() {
+    return this._loginHandler;
+  }
+  set loginHandler(value) {
+    this._loginHandler = value;
+  }
 
   forgotPasswordHandler = async (req, res) => {
     // I sent the confirmEmail message into here for testing and visibilty,
@@ -78,6 +85,11 @@ class UserController {
   saveOauthUserHandler = async (req, res) => {
     const responseObject = await UserService.saveAuthUser(req);
     res.status(200).send(responseObject);
+  };
+
+  editAgentProfileHandler = async (req, res) => {
+    const updatedProfile = await UserService.editAgentProfile(req);
+    res.status(200).send(updatedProfile);
   };
 }
 

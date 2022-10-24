@@ -1,5 +1,7 @@
 const { Router } = require('express');
 const validator = require('express-joi-validation').createValidator({});
+const { protect, authorize } = require('../middlewares/protect-route');
+const upload = require('../config/multer');
 
 const UserController = require('../controllers/userController');
 const {
@@ -12,7 +14,9 @@ const {
   resetLostPasswordToken,
   resetCurrentPassword,
   resetCurrentPasswordId,
+  verifyAgentProfileInfo,
 } = require('../middlewares/joi-verify/joi-user-validation');
+
 
 const userRouter = Router();
 
@@ -38,5 +42,16 @@ userRouter.put(
   UserController.resetCurrentPasswordHandler,
 );
 userRouter.get('/confirmaccount/:token', validator.params(confirmEmailToken), UserController.confirmAccountHandler);
+
+userRouter.put(
+  '/update-agent-profile/:id',
+  // protect,
+  // authorize('agent'),
+  validator.body(verifyAgentProfileInfo),
+  upload.fields([
+    { name: 'mainImage', maxCount: 1 },
+    { name: 'businessLogo', maxCount: 1 }]),
+  UserController.editAgentProfileHandler,
+);
 
 module.exports = userRouter;

@@ -9,7 +9,6 @@ class PropertyController {
     });
   };
 
-
   postPropertyForDraft = async (req, res) => {
     const property = await PropertyService.createPropertyDraft(req);
     res.status(200).json({

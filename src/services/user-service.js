@@ -1,19 +1,24 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-unused-vars */
 const {
   UnAuthorizedError,
   BadRequestError,
   NotFound,
   AlreadyExist,
-} = require("../error/errors");
-const { MESSAGES, BASE_URL, FRONTEND_URL } = require("../config/constants");
+} = require('../error/errors');
+const {
+  MESSAGES, BASE_URL, FRONTEND_URL, UPLOAD_PATH,
+} = require('../config/constants');
 const {
   comparePassword,
   decryptData,
   hashPassword,
   createJwt,
-} = require("../utils/data-crypto");
+} = require('../utils/data-crypto');
+const { uploadSingleFile } = require('../config/cloudinary');
 
-const sendEmail = require("../utils/email");
-const UserModel = require("../models/user-model");
+const sendEmail = require('../utils/email');
+const UserModel = require('../models/user-model');
 
 class UserService {
   registerUser = async (req) => {
@@ -35,17 +40,20 @@ class UserService {
 
     //  Send Email For Verification To User
     const link = `${BASE_URL}/user/confirmaccount/${token}`;
-    await sendEmail(email, "Verify Email Haven", { firstName, link });
+    await sendEmail(email, 'Verify Email Haven', { firstName, link });
     return { email: newUser.email, id: newUser._id };
   };
 
+  // Get user by business name
+
   getUserByBusinessName = async (req) => {
-    const { name } = req.params;
-    const user = UserModel.findOne({
-      "businessInformation.businessName": name,
-    });
+    const agencyName = req.params.name;
+    if (!agencyName) {
+      throw new BadRequestError('Please provide agency name');
+    }
+    const user = UserModel.findOne({ 'businessInformation.businessName': agencyName });
     if (!user) {
-      throw new BadRequestError("Invalid  User");
+      throw new BadRequestError('No user found');
     }
     return user;
   };
@@ -54,7 +62,7 @@ class UserService {
     const { token } = req.params;
 
     if (!token) {
-      throw new BadRequestError("Please Input Your Token");
+      throw new BadRequestError('Please Input Your Token');
     }
 
     const { id } = await decryptData(token);
@@ -64,18 +72,18 @@ class UserService {
         _id: id,
       },
       { isValid: true },
-      { new: true }
+      { new: true },
     );
     const { email, firstName, role } = user;
-    const link = "https://realhaven.herokuapp.com";
+    const link = 'https://realhaven.herokuapp.com';
 
     // After Verification, sends welcome email to the user or Agent
-    if (role === "user") {
-      await sendEmail(email, "Welcome To Haven User", { firstName, link });
+    if (role === 'user') {
+      await sendEmail(email, 'Welcome To Haven User', { firstName, link });
     } else {
-      await sendEmail(email, "Welcome To Haven Agent", {
+      await sendEmail(email, 'Welcome To Haven Agent', {
         firstName,
-        link: "https://realhaven.herokuapp.com/dashboard",
+        link: 'https://realhaven.herokuapp.com/dashboard',
       });
     }
 
@@ -96,7 +104,7 @@ class UserService {
 
     const token = await userExist.createAndSignJwtToken();
     const link = `${BASE_URL}/user/confirmaccount/${token}`;
-    await sendEmail(email, "Verify Your Account", {
+    await sendEmail(email, 'Verify Your Account', {
       firstName: userExist.firstName,
       link,
     });
@@ -105,10 +113,10 @@ class UserService {
   login = async (req) => {
     const { email, password } = req.body;
     if (!email || !password) {
-      throw new BadRequestError("Please Input Email or Password");
+      throw new BadRequestError('Please Input Email or Password');
     }
 
-    const userExist = await UserModel.findOne({ email }).select("+password");
+    const userExist = await UserModel.findOne({ email }).select('+password');
     if (!userExist) {
       throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
@@ -140,12 +148,12 @@ class UserService {
       throw new NotFound(MESSAGES.USER_NOT_EXIST);
     }
     if (!userExist.isValid) {
-      throw new BadRequestError("Your account is not verified");
+      throw new BadRequestError('Your account is not verified');
     }
 
     const token = await userExist.createAndSignJwtToken();
     const link = `${FRONTEND_URL}/reset/password/${token}`;
-    await sendEmail(email, "We Recieved A Request", {
+    await sendEmail(email, 'We Recieved A Request', {
       link,
     });
 
@@ -167,7 +175,7 @@ class UserService {
     }
 
     if (token !== userExist.resetPasswordToken) {
-      throw new BadRequestError("Invalid Request");
+      throw new BadRequestError('Invalid Request');
     }
 
     const hashedPassword = await hashPassword(password);
@@ -178,8 +186,8 @@ class UserService {
 
     // Send email to user that their email has been reset
     const { firstName, email } = userExist;
-    const link = "https://realhaven.herokuapp.com/login";
-    await sendEmail(email, "Operation Successfull", {
+    const link = 'https://realhaven.herokuapp.com/login';
+    await sendEmail(email, 'Operation Successfull', {
       firstName,
       link,
     });
@@ -189,7 +197,7 @@ class UserService {
     const { currentPassword, newPassword } = req.body;
     const userId = req.params.id;
 
-    const userExist = await UserModel.findById(userId).select("+password");
+    const userExist = await UserModel.findById(userId).select('+password');
 
     if (!userExist) {
       throw new NotFound(MESSAGES.USER_NOT_EXIST);
@@ -208,7 +216,7 @@ class UserService {
   getUserById = async (req) => {
     const { id } = req.params;
     if (!id) {
-      throw new BadRequestError("Input Id");
+      throw new BadRequestError('Input Id');
     }
     const user = await UserModel.findById(id);
     if (!user) {
@@ -230,9 +238,11 @@ class UserService {
   };
 
   saveAuthUser = async (req) => {
-    const { email, firstName, lastName, image } = req.body;
+    const {
+      email, firstName, lastName, image,
+    } = req.body;
     if (!email) {
-      throw new BadRequestError("No email sent");
+      throw new BadRequestError('No email sent');
     }
 
     const user = await UserModel.findOneAndUpdate(
@@ -241,15 +251,15 @@ class UserService {
       },
       {
         email,
-        "image.url": image,
+        'image.url': image,
         isValid: true,
         firstName,
         lastName,
       },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     );
 
-    const token = await createJwt({ id: user._id, email: user.email }, "12h");
+    const token = await createJwt({ id: user._id, email: user.email }, '12h');
 
     const responseObject = {
       sucess: true,
@@ -259,6 +269,70 @@ class UserService {
     // redirect
     return responseObject;
   };
+
+  async editAgentProfile(req) {
+    const userId = req.params.id;
+    let user = await UserModel.findById(userId);
+    const { businessName } = req.body;
+    // const mainImage = req.files.mainImage[0];
+    // const businessLogo = req.files.businessLogo[0];
+    let secure_main_url;
+    let public_main_id;
+    let secure_businessLogo_url;
+    let public_businessLogo_id;
+
+    if (!user) {
+      throw new NotFound(MESSAGES.USER_NOT_EXIST);
+    }
+    // eslint-disable-next-line no-trailing-spaces
+   
+    // if (mainImage) {
+    //   try {
+    //     const mainImageUpload = await uploadSingleFile(
+    //       mainImage.path,
+    //       UPLOAD_PATH.AGENT_MAIN_IMAGE,
+
+    //       'image',
+    //     );
+    //     secure_main_url = mainImageUpload.secure_url;
+    //     public_main_id = mainImageUpload.public_id;
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }
+
+    // if (businessLogo) {
+    //   try {
+    //     const businessLogoImageUpload = await uploadSingleFile(
+    //       businessLogo.path,
+    //       UPLOAD_PATH.AGENT_BUSINESS_LOGO,
+
+    //       'image',
+    //     );
+    //     secure_businessLogo_url = businessLogoImageUpload.secure_url;
+    //     public_businessLogo_id = businessLogoImageUpload.public_id;
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }
+
+    user = await UserModel.findByIdAndUpdate(userId, {
+      ...req.body,
+      businessInformation: {
+        businessName,
+      },
+      mainImage: {
+        url: secure_main_url,
+        publicId: public_main_id,
+      },
+      businessLogo: {
+        url: secure_businessLogo_url,
+        publicId: public_businessLogo_id,
+      },
+    }, { new: true, upsert: true });
+
+    return user;
+  }
 }
 
 module.exports = new UserService();

@@ -30,6 +30,8 @@ const constants = {
     PROPERTY_IMAGES: 'PROPERTY_IMAGES',
     DRAFT_PROPERTIES: 'DRAFT_PROPERTIES',
     PROPERTY_VIDEOS: 'PROPERTY_VIDEOS',
+    AGENT_MAIN_IMAGE: 'AGENT_MAIN_IMAGE',
+    AGENT_BUSINESS_LOGO: 'AGENT_BUSINESS_LOGO',
   },
 
   DB_COLLECTION: {
@@ -42,6 +44,7 @@ const constants = {
     USER_EXIST: 'User already exists',
     USER_CREATED: 'User created successfully',
     USER_LOGGED: 'User logged in successfully',
+    USER_LOGGED_OUT: 'User logged out in successfully',
     USER_UPDATED: 'User updated successfully',
     USER_NOT_EXIST: 'User does not exist',
     USER_ACTIVITY_GOTTEN: 'User activities gotten successfully',

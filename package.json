@@ -30,6 +30,7 @@
     "gulp": "^4.0.2",
     "handlebars": "^4.7.7",
     "joi": "^17.6.0",
+    "joi-tz": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
     "mjml": "^4.13.0",
     "mongoose": "^6.4.4",

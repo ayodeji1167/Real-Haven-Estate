@@ -61,7 +61,6 @@ class PropertyService {
 
   // Save property to draft
   createPropertyDraft = async (req) => {
-  
     const { mainImage, file } = await req.files;
 
     const otherImagesUrl = [];
@@ -103,7 +102,6 @@ class PropertyService {
     });
     return property;
   };
-
 
   getPropertyById = async (req) => {
     const { id } = req.params;
