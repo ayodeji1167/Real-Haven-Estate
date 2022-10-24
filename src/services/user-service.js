@@ -32,7 +32,7 @@ class UserService {
     const { secure_url, public_id } = await uploadSingleFile(path, USER_IMAGES, 'image');
 
     const updatedUser = await UserModel.findByIdAndUpdate(id, {
-      profilePhoto: {
+      image: {
         url: secure_url,
         publicId: public_id,
       },

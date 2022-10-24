@@ -33,7 +33,7 @@ class UserController {
     if (!result) {
       res.status(403).json({ mesage: constants.MESSAGES.USER_NOT_EXIST });
     } else {
-      res.redirect('https://realhaven.herokuapp.com/login');
+      res.redirect('https://www.realhaven.homes/login');
     }
   };
 
